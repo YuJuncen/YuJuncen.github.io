@@ -11,7 +11,7 @@ marked.use({ highlight: function(code, language) {
     return hljs.highlight(validLanguage, code).value;
 }})
 
-const PATH_RELEASE = './release'
+const PATH_RELEASE = './docs'
 const PATH_META_DATABASE = './articles/meta.json'
 const PATH_ARTICLE_RELEASE = path.resolve(PATH_RELEASE, "articles")
 const PATH_TEMPLATE = './template'
