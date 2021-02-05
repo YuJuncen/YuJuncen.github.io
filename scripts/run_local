@@ -1,6 +1,0 @@
-#! /bin/bash
-
-port=9000
-echo -n $'\e\[32m' "Hint:" $'\e\N\e\[m' 
-echo "Starting develop server at http://localhost:$port"
-python3 -m http.server $port

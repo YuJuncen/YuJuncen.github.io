@@ -1,3 +1,0 @@
-#! /bin/bash
-
-node gen_static_pages.js
