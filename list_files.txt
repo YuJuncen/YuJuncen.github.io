@@ -1,5 +1,0 @@
-articles
-index.html
-list_files.txt
-resources
-somewhat

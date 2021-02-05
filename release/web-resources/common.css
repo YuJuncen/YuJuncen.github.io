@@ -1,0 +1,277 @@
+:root {
+    --white: #F3F3F3;
+    --white-darker: #E3E3E3;
+    --white-darkest: #D3D3D3;
+    --dark: #0C0C0C;
+    --primary: #227D51;
+    --primary-darker: #126D41;
+    --primary-darkest: #025D31;
+    --secondary: #86C166;
+    --secondary-darker: #66A146;
+    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    --mono: 'Menlo', 'Consolas', 'Source Code Pro', monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --white: #373C38;
+        --white-darker: #474C48;
+        --white-darkest: #575C58;
+        --dark: #F3F3F3;
+        --primary: #429D71;
+        --primary-darker: #52AD81;
+        --primary-darkest: #62BD91;
+        --secondary: #86C166;
+        --secondary-darker: #A6E186;
+    }
+}
+
+html {
+    background-color: var(--white);
+    color: var(--dark);
+}
+
+code {
+    color: var(--secondary-darker);
+    font-family: var(--mono);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+div,
+span,
+button,
+em {
+    font-family: '宋体', 'Times New Roman', Times, serif;
+    color: var(--dark);
+}
+
+em {
+    color: var(--secondary-darker);
+}
+
+a {
+    color: var(--secondary-darker);
+    font-weight: bold;
+}
+
+p, blockquote, code{
+    font-size: 20px;
+}
+
+a:visited {
+    color: var(--secondary);
+    font-weight: normal;
+}
+
+ol {
+    counter-reset: --list-counter;
+    list-style: none;
+    margin-inline-start: 0;
+    padding-inline-start: 20px;
+}
+
+ol li {
+    counter-increment: --list-counter;
+    vertical-align:middle;
+
+}
+
+ol li::before {
+    display: inline-block;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    content: counter(--list-counter) '.';
+    color: var(--secondary-darker);
+    font-size: .75em;
+    
+
+    vertical-align:middle;
+    text-align: center;
+    margin-inline-end: .75em;
+}
+
+ul {
+    list-style: none;
+    margin-inline-start: 0;
+    padding-inline-start: 20px;
+}
+
+ul li {
+    vertical-align:middle;
+
+}
+
+ul li::before {
+    display: inline-block;
+    font-family: var(--sans);
+    content: "-";
+    color: var(--secondary-darker);
+    font-size: .75em;
+    vertical-align:middle;
+    text-align: center;
+    height:1.5em;
+    margin-inline-end: .75em;
+}
+
+blockquote {
+    background-color: var(--white-darker);
+    border-left: solid 2px var(--secondary);
+    margin-inline-start: 0;
+    padding-inline-start: 20px;
+    padding-block-start: .3em;
+    padding-block-end: .3em;
+    padding-inline-end: 40px;
+    margin-inline-end: 0px;
+}
+
+pre {
+    overflow-x: auto;
+    background-color: var(--white-darker);
+    margin-inline-start: 0;
+    padding-block-start: .5em;
+    margin-block-start: 1em;
+    padding-block-end: .5em;
+    padding-inline-start: 20px;
+    padding-inline-end: 40px;
+    margin-block-end: 1em;
+    font-size: 16px;
+}
+
+pre code {
+    color: var(--black);
+    font-family: var(--mono);
+    font-size: 16px;
+}
+
+pre code * {
+    font-family: var(--mono);
+}
+
+h1::before {
+    content: "#";
+    color: var(--primary);
+    margin-inline-end: .5em;
+}
+
+h2::before {
+    content: "##";
+    color: var(--primary);
+    margin-inline-end: .5em;
+}
+
+h3::before {
+    content: "###";
+    color: var(--primary);
+    margin-inline-end: .5em;
+}
+
+h4::before {
+    content: "####";
+    color: var(--secondary);
+    margin-inline-end: .5em;
+}
+
+h5::before {
+    content: "#####";
+    color: var(--secondary);
+    margin-inline-end: .5em;
+}
+
+h6::before {
+    content: "######";
+    color: var(--secondary);
+    margin-inline-end: .5em;
+}
+
+.info {
+    font-family: var(--sans);
+}
+
+.button,
+.button-primary {
+    font-size: 16px;
+    border: none;
+    border-radius: 2px;
+    padding: 0.25em 0.5em;
+    background: none;
+    transition: background .3s;
+}
+
+.button:hover {
+    background-color: var(--white-darker);
+    cursor: pointer;
+}
+
+.button:active {
+    background-color: var(--white-darkest);
+    cursor: pointer;
+}
+
+.button-primary:hover {
+    background-color: var(--primary-darker);
+    cursor: pointer;
+}
+
+.button-primary:active {
+    background-color: var(--primary-darkest);
+    cursor: pointer;
+}
+
+.button-primary {
+    color: var(--white);
+    background-color: var(--primary);
+}
+
+.badge {
+    font-family: var(--sans);
+    background-color: var(--white-darker);
+    padding: 2px 4px 2px 4px;
+    border-radius: 2px;
+    color: var(--secondary);
+}
+
+.tag::before {
+    content: "# ";
+    color: var(--secondary);
+}
+
+.tag {
+    display: inline;
+    font-family: var(--sans);
+    color: var(--black);
+    background-color: var(--white-darker);
+    border-radius: 4px 2em 2em 4px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-inline-start: .3em;
+    padding-inline-end: .5em;
+    margin-inline-end: .75em;
+}
+
+.card {
+    transition: background .3s;
+    margin: 4px 2px;
+    padding: 8px 8px 8px 8px;
+    border-radius: 4px;
+}
+
+.card:hover {
+    background-color: var(--white-darker);
+}
+
+.card:active {
+    background-color: var(--white-darkest);
+}
+
+.title {
+    font-size: 32px;
+    font-weight: bolder;
+}
+
+.title:hover {
+    cursor: pointer;   
+}

@@ -1,0 +1,19 @@
+include ./common.pug
+
+html 
+    head
+        +common_head
+    body
+        +header
+        .container.align-center.justify-center
+            .fix-sized        
+                h1 #{name}
+                each t in tags
+                    .tag #{t}
+                p
+                    span.badge 发布于
+                    span.info    #{createdAt}
+                p
+                    span.badge 更新于
+                    span.info    #{lastUpdated}
+                | !{renderedContent}

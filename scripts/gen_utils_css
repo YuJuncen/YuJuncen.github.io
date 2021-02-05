@@ -1,0 +1,13 @@
+#!/bin/bash
+
+for orient in left right top bottom; do
+    for op in margin padding; do
+        for amount in $(seq 1 4); do
+            cat >> utils.css <<EOF
+.${op:0:1}${orient:0:1}$amount {
+    ${op}-${orient}: $(( amount*4 ))px;
+}
+EOF
+        done
+    done
+done
