@@ -107,7 +107,8 @@
     justify-content: center;
 }
 .fix-sized {
-    max-width: 960px;
+    /* 8px for margin of body (a.k.a. bleed lines), 2px for more margin */
+    max-width: min(960px, calc(100vw - 20px));
 }
 .w100 {
     width: 100%;
