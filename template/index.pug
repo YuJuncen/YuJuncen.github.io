@@ -2,7 +2,7 @@ include ./common.pug
 
 mixin article(title, createdAt, lastUpdated, tags, introText)
     .card(onclick=`window.location='/articles/${title}.html'`)
-        h1(style="margin-block-start:.15em;margin-block-end:.15em") #{title}
+        h1(style="margin-block-start:.15em;") #{title}
         each tag in tags
             .tag #{tag}
         p

@@ -21,7 +21,7 @@ Then, put your articles into the `articles` folder, then generate the static sit
 node scripts/gen_static_pages.js
 ```
 
-The pages will be generated at the `docs` folder (GitHub pages seems only support deliver root dir or `/docs`!), 
+The pages will be generated at the `docs` folder (GitHub pages seems only supports delivering root dir or `/docs`!), 
 you can serve them locally for debugging with your favorite web server.
 
 As an example, the following instruction shows how to start a simple server with python's `http.server`:
