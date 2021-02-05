@@ -228,7 +228,6 @@ h6::before {
 
 .badge {
     font-family: var(--sans);
-    background-color: var(--white-darker);
     padding: 2px 4px 2px 4px;
     border-radius: 2px;
     color: var(--secondary);
@@ -243,8 +242,6 @@ h6::before {
     display: inline;
     font-family: var(--sans);
     color: var(--black);
-    background-color: var(--white-darker);
-    border-radius: 4px 2em 2em 4px;
     padding-top: 2px;
     padding-bottom: 2px;
     padding-inline-start: .3em;

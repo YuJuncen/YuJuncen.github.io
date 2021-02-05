@@ -3,14 +3,15 @@ include ./common.pug
 mixin article(title, createdAt, lastUpdated, tags, introText)
     .card(onclick=`window.location='/articles/${title}.html'`)
         h1(style="margin-block-start:.15em;margin-block-end:.15em") #{title}
+        each tag in tags
+            .tag #{tag}
         p
             span.badge.mr1 创建于
             span.info #{createdAt}
         p
             span.badge.mr1 更新于
             span.info #{lastUpdated}
-        each tag in tags
-            .tag #{tag}  
+
 
 html
     head
