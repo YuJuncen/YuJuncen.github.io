@@ -23,6 +23,6 @@ node scripts/gen_static_pages.js
 
 ## TODO
 
-- [] Pagination.  
-- [] CLI for adding tags / intro texts.  
-- [] Archive by month.  
+- [ ] Pagination.  
+- [ ] CLI for adding tags / intro texts.  
+- [ ] Archive by month.  
