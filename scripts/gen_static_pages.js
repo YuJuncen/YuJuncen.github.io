@@ -5,11 +5,13 @@ const fsp = require('fs/promises')
 const path = require('path')
 const { format } = require('timeago.js')
 
-marked.use({ highlight: function(code, language) {
-    const hljs = require('highlight.js');
-    const validLanguage = hljs.getLanguage(language) ? language : 'plaintext';
-    return hljs.highlight(validLanguage, code).value;
-}})
+marked.use({ 
+    highlight: function(code, language) {
+        const hljs = require('highlight.js');
+        const validLanguage = hljs.getLanguage(language) ? language : 'plaintext';
+        return hljs.highlight(validLanguage, code).value;
+    },
+})
 
 const PATH_RELEASE = './docs'
 const PATH_META_DATABASE = './articles/meta.json'

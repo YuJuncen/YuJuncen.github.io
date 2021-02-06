@@ -6,6 +6,7 @@
     --primary: #227D51;
     --primary-darker: #126D41;
     --primary-darkest: #025D31;
+    --selection-color:  #025D3133;
     --secondary: #86C166;
     --secondary-darker: #66A146;
     --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -24,6 +25,7 @@
         --primary-darkest: #62BD91;
         --secondary: #86C166;
         --secondary-darker: #A6E186;
+        --selection-color: #62BD9133;
     }
 }
 
@@ -35,6 +37,18 @@ html {
 code {
     color: var(--secondary-darker);
     font-family: var(--mono);
+}
+
+h1,
+h2,
+h3 {
+    font-weight: lighter;
+}
+
+h4,
+h5,
+h6 {
+    font-weight: normal;
 }
 
 h1,
@@ -60,8 +74,31 @@ a {
     font-weight: bold;
 }
 
-p, blockquote, code{
+p, blockquote, code, li{
     font-size: 20px;
+}
+
+h6 {
+    font-size: 24px;
+}
+h5 {
+    font-size: 28px;
+}
+h4 {
+    font-size: 32px;
+}
+h3 {
+    font-size: 36px;
+}
+h2 {
+    font-size: 40px;
+}
+h1 {
+    font-size: 44px;
+}
+
+::selection {
+    background-color: var(--selection-color);
 }
 
 a:visited {
@@ -269,8 +306,33 @@ h6::before {
     font-size: 32px;
     font-weight: bolder;
     font-family: var(--serif);
+    margin-block-end: 16px;
 }
 
 .title:hover {
     cursor: pointer;   
+}
+
+.links {
+    padding-inline-start: 0;
+    margin-block-start: 0;
+}
+
+.links li::before {
+    content: "";
+}
+
+li.link a {
+    font-family: var(--serif);
+    color: var(--primary-darkest);
+    font-weight: bolder;
+    text-decoration: none;
+    font-size: 20px;
+}
+
+/* 40px of each size for buffering.*/
+@media (max-width: 1040px) {
+    .desktop-only {
+        display: none;
+    }
 }

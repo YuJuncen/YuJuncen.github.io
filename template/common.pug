@@ -6,6 +6,15 @@ mixin common_head
     link(type="text/css", rel="stylesheet", href="/web-resources/mono-blue.min.css")
     link(type="text/css", rel="stylesheet", href="/web-resources/dark.min.css")
 
+mixin header-with-word(words)
+    .container.align-center.justify-center.horizontal
+        p.title(onclick="window.location='/'") #{words}
+        ul.container.align-center.justify-center.links
+            li.link.mr2 #[a(onclick="alert('currently WIP!')" href="#").button 归档]
+            li.link.mr2 #[a(onclick="alert('currently WIP!')" href="#").button 关于]
+
 mixin header
-    .container.align-center.justify-center
-        p.title(onclick="window.location='/'") “南方之诗” (WIP)
+    +header-with-word('“南方之诗”')
+
+mixin wip
+    div(style="position:fixed;left:8px;top:0;font-size:54px;font-weight:lighter;color:#88888844;").desktop-only Work in progress

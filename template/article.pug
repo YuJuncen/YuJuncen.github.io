@@ -5,9 +5,10 @@ html
         +common_head
         title “#{name}”
     body
+        +wip
         +header
         .container.align-center.justify-center
-            .fix-sized        
+            .fix-sized.w100
                 h1 #{name}
                 each t in tags
                     .tag #{t}
