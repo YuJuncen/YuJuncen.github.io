@@ -3,7 +3,6 @@ const marked = require('marked')
 const fs = require('fs')
 const fsp = require('fs/promises')
 const path = require('path')
-const { format } = require('timeago.js')
 
 marked.use({ 
     highlight: function(code, language) {
@@ -27,7 +26,7 @@ const TEMPLATE_ARTICLE = compilePug('article.pug')
 const TEMPLATE_INDEX = compilePug('index.pug')
 const renderTime = t => {
     if (t instanceof Date) {
-        return format(t, 'zh_CN')
+        return t.toLocaleString()
     }
     return `${t}`
 }

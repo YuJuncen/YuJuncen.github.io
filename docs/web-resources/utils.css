@@ -107,7 +107,7 @@
     justify-content: center;
 }
 .fix-sized {
-    /* 8px for margin of body (a.k.a. bleed lines), 2px for more margin */
+    /* 8px for omit default margin of body, and 2px is the real margin. */
     max-width: min(960px, calc(100vw - 20px));
 }
 .w100 {

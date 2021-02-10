@@ -1,4 +1,4 @@
-<html> <head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link type="text/css" rel="stylesheet" href="/web-resources/common.css"/><link type="text/css" rel="stylesheet" href="/web-resources/utils.css"/><link type="text/css" rel="stylesheet" href="/web-resources/mono-blue.min.css"/><link type="text/css" rel="stylesheet" href="/web-resources/dark.min.css"/><title>“The little Printf -- 我们因何而编码？”</title></head><body><div class="desktop-only" style="position:fixed;left:8px;top:0;font-size:54px;font-weight:lighter;color:#88888844;">Work in progress</div><div class="container align-center justify-center horizontal"><p class="title" onclick="window.location='/'">“南方之诗”</p><ul class="container align-center justify-center links"><li class="link mr2"><a class="button" onclick="alert('currently WIP!')" href="#">归档</a></li><li class="link mr2"><a class="button" onclick="alert('currently WIP!')" href="#">关于</a></li></ul></div><div class="container align-center justify-center"><div class="fix-sized w100"><h1>The little Printf -- 我们因何而编码？</h1><div class="tag">杂谈</div><div class="tag">观点</div><p><span class="badge">发布于</span><span class="info mr1">3 天前</span></p><p><span class="badge">更新于</span><span class="info mr1">2 天前</span></p><h2 id="译者注">译者注</h2>
+<html> <head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link type="text/css" rel="stylesheet" href="/web-resources/common.css"/><link type="text/css" rel="stylesheet" href="/web-resources/utils.css"/><link type="text/css" rel="stylesheet" href="/web-resources/mono-blue.min.css"/><link type="text/css" rel="stylesheet" href="/web-resources/dark.min.css"/><title>“The little Printf -- 我们因何而编码？”</title></head><body><div class="desktop-only" style="position:fixed;left:8px;top:0;font-size:54px;font-weight:lighter;color:#88888844;">Work in progress</div><div class="container align-center justify-center horizontal"><p class="title" onclick="window.location='/'">“南方之诗”</p><ul class="container align-center justify-center links"><li class="link mr2"><a class="button" onclick="alert('currently WIP!')" href="#">归档</a></li><li class="link mr2"><a class="button" onclick="alert('currently WIP!')" href="#">关于</a></li></ul></div><div class="container align-center justify-center"><div class="fix-sized w100"><h1>The little Printf -- 我们因何而编码？</h1><div class="tag">杂谈</div><div class="tag">观点</div><p><span class="badge">发布于</span><span class="info mr1">2021/2/3 下午7:15:46</span></p><p><span class="badge">更新于</span><span class="info mr1">2021/2/10 下午1:35:31</span></p><h2 id="译者注">译者注</h2>
 <p>这篇文章翻译自<a href="https://ferd.ca/the-little-printf.html">此处</a>。</p>
 <p>这篇文章很早之前已经有人翻译过，这个版本是我出于个人爱好的翻译。</p>
 <p>原作者是《Erlang 趣学指南》的作者 Fred Hébert，这是他在芝加哥的 <a href="http://chicago.citycode.io/">CityCode</a> 会议上的 presentation 的脚本，这个 presentation 的视频可以在 <a href="https://youtu.be/EWdqtMdcNkE">YouTube</a> 上看到。</p>
@@ -11,18 +11,6 @@
 <p>斜体字部分，像这样：</p>
 <p><em>&quot;请帮我设计一个系统！&quot;</em></p>
 <p>是小 Printf 说的话。</p>
-<pre><code class="language-haskell"><span class="hljs-title">main</span> :: <span class="hljs-type">IO</span> ()
-<span class="hljs-title">main</span> = putStrLn <span class="hljs-string">&quot;Greeting, my friend.&quot;</span>
-</code></pre>
-<ol>
-<li>试着去做。</li>
-<li>试着让它跑起来！</li>
-<li>优化它！</li>
-</ol>
-<ul>
-<li>UNIX 哲学：选择最容易实现的路（大概是这个意思？）</li>
-<li>The MIT Path：一致性，可拓展性。</li>
-</ul>
 <h2 id="第一章">第一章</h2>
 <p>我有幸在电脑和电子游戏普遍存在之前出生，因而有了在户外同朋友和兄弟们玩耍、发明属于我们自己游戏的福分。  </p>
 <p>我们能成为自己的英雄，用着一根小树枝，它可以成为弓箭、枪炮、短剑或者望远镜。它能变成一切——除了回力标，因为一旦你这根树枝扔出去，你必须得要跑过去给他捡回来。  </p>
