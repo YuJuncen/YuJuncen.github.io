@@ -330,6 +330,11 @@ li.link a {
     font-size: 20px;
 }
 
+img {
+    max-width: calc(100% - 16px);
+    max-height: 33%;
+}
+
 @media (max-width: 1040px) {
     .desktop-only {
         display: none;

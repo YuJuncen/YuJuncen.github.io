@@ -116,3 +116,9 @@
 .h100 {
     height: 100%;
 }
+.wfull {
+    width: 100vw;
+}
+.hfull {
+    height: calc(100vh - 16px);
+}

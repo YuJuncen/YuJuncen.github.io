@@ -10,6 +10,11 @@ marked.use({
         const validLanguage = hljs.getLanguage(language) ? language : 'plaintext';
         return hljs.highlight(validLanguage, code).value;
     },
+    renderer : {
+        image(href, title, text) {
+            return `<img src="${href}" loading=lazy alt="${text}" ${title && `title="${title}" data-title="${title}"`} />`
+        }
+    }
 })
 
 const PATH_RELEASE = './docs'
@@ -24,6 +29,7 @@ const compilePug = (file) => pug.compile(
     })
 const TEMPLATE_ARTICLE = compilePug('article.pug')
 const TEMPLATE_INDEX = compilePug('index.pug')
+const TEMPLATE_404 = compilePug('404.pug')
 const renderTime = t => {
     if (t instanceof Date) {
         return t.toLocaleString()
@@ -37,6 +43,10 @@ const genIndexPage = ({articles, pageNum, maxPageNum}) => {
         pageNum, 
         maxPageNum
     })
+}
+
+const write404 = async () => {
+    await fsp.writeFile(path.resolve(PATH_RELEASE, '404.html'), TEMPLATE_404({}))
 }
 
 const writeIndices = async (articles) => {
@@ -105,7 +115,7 @@ const genWithArticles = async (articlesPath) => {
                 await writeArticlePage(article)
     }))
     const writingIndices = writeIndices(articleDB)
-    await Promise.all([writingPages, writingIndices])
+    await Promise.all([writingPages, writingIndices, write404()])
 }
 
 genWithArticles("articles")
