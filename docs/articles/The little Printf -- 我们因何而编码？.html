@@ -1,4 +1,4 @@
-<html> <head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link type="text/css" rel="stylesheet" href="/web-resources/common.css"/><link type="text/css" rel="stylesheet" href="/web-resources/utils.css"/><link type="text/css" rel="stylesheet" href="/web-resources/mono-blue.min.css"/><link type="text/css" rel="stylesheet" href="/web-resources/dark.min.css"/><title>“The little Printf -- 我们因何而编码？”</title></head><body><div class="desktop-only" style="position:fixed;left:8px;top:0;font-size:54px;font-weight:lighter;color:#88888844;width:calc((100% - 960px) / 2);overflow-wrap:break-word;">Work in progress</div><div class="container align-center justify-center horizontal"><p class="title" onclick="window.location='/'">“南方之诗”</p><ul class="container align-center justify-center links"><li class="link mr2"><a class="button" onclick="alert('currently WIP!')" href="#">归档</a></li><li class="link mr2"><a class="button" onclick="alert('currently WIP!')" href="#">关于</a></li></ul></div><div class="container align-center justify-center"><div class="fix-sized w100"><h1>The little Printf -- 我们因何而编码？</h1><div class="tag">杂谈</div><div class="tag">观点</div><p><span class="badge">发布于</span><span class="info mr1">2021/2/10 下午1:37:27</span></p><p><span class="badge">更新于</span><span class="info mr1">2021/2/10 下午7:06:54</span></p><h2 id="译者注">译者注</h2>
+<html> <head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link type="text/css" rel="stylesheet" href="/web-resources/common.css"/><link type="text/css" rel="stylesheet" href="/web-resources/utils.css"/><link type="text/css" rel="stylesheet" href="/web-resources/mono-blue.min.css"/><script src="/web-resources/lazyimg.js"></script><title>“The little Printf -- 我们因何而编码？”</title></head><body><div class="desktop-only" style="position:fixed;left:8px;top:0;font-size:54px;font-weight:lighter;color:#88888844;width:calc((100% - 960px) / 2);overflow-wrap:break-word;">Work in progress</div><div class="container align-center justify-center horizontal"><p class="title" onclick="window.location='/'">“南方之诗”</p><ul class="container align-center justify-center links"><li class="link mr2"><a class="button" onclick="alert('currently WIP!')" href="#">归档</a></li><li class="link mr2"><a class="button" onclick="alert('currently WIP!')" href="#">关于</a></li></ul></div><div class="container align-center justify-center"><div class="fix-sized w100"><h1>The little Printf -- 我们因何而编码？</h1><div class="tag">杂谈</div><div class="tag">观点</div><p><span class="badge">发布于</span><span class="info mr1">2021/2/10 下午1:37:27</span></p><p><span class="badge">更新于</span><span class="info mr1">2021/2/10 下午7:06:54</span></p><h2 id="译者注">译者注</h2>
 <p>这篇文章翻译自<a href="https://ferd.ca/the-little-printf.html">此处</a>。</p>
 <p>这篇文章很早之前已经有人翻译过，这个版本是我出于个人爱好的翻译。</p>
 <p>原作者是《Erlang 趣学指南》的作者 Fred Hébert，这是他在芝加哥的 <a href="http://chicago.citycode.io/">CityCode</a> 会议上的 presentation 的脚本，这个 presentation 的视频可以在 <a href="https://youtu.be/EWdqtMdcNkE">YouTube</a> 上看到。</p>
@@ -14,19 +14,19 @@
 <h2 id="第一章">第一章</h2>
 <p>我有幸在电脑和电子游戏普遍存在之前出生，因而有了在户外同朋友和兄弟们玩耍、发明属于我们自己游戏的福分。  </p>
 <p>我们能成为自己的英雄，用着一根小树枝，它可以成为弓箭、枪炮、短剑或者望远镜。它能变成一切——除了回力标，因为一旦你这根树枝扔出去，你必须得要跑过去给他捡回来。  </p>
-<p><img src="https://i.loli.net/2019/11/30/QJNbqXvLcj1ms6V.png" loading=lazy alt="回力标和树枝之间的比较" null /></p>
+<p><img data-src="https://i.loli.net/2019/11/30/QJNbqXvLcj1ms6V.png" alt="回力标和树枝之间的比较"  /></p>
 <p>某时，我长大了。这种童游自此以后变得羞耻。你无法将松果当成手榴弹、无法假装拥有魔力，哪怕其他的孩子们认为成为大人很酷。你感到无所适从。你最终在成长中感受到了压力。即便如此，那也是很幸运的童年。  </p>
 <p>某时，我有了打电子游戏的机会、还有使用电脑的机会。<em>那里</em>可以有你一直期待着的幻想世界，一切活生生地就在眼前。它消耗着你，而在那一小会儿你得以享受截然不同的生活。  </p>
 <p>但是绝大多数电子游戏都有一些不同的地方：你不再创造，而是做出响应、而是消费。青年时期的我最终参与了即兴剧演出。然后，又一次，同人们一起创造、扮演变得没有问题。  </p>
-<p><img src="https://i.loli.net/2019/11/30/UL4hoFaOubcflpB.png" loading=lazy alt="一个供人们玩乐、即兴表演的溜冰场" null /></p>
+<p><img data-src="https://i.loli.net/2019/11/30/UL4hoFaOubcflpB.png" alt="一个供人们玩乐、即兴表演的溜冰场"  /></p>
 <p>当然，魁北克市的即兴演出有些不同；有一个滑冰场供我们表演——所有这一切完全就是曲棍球。  </p>
 <p>2005 年至 2008 年，那时我进入全日制大学学习多媒体，我最终踏入了编程工作，我发现它真的非常棒！创造力在它那儿重新归来，而且还可以让我赚钱！而后我为我的第一个游戏设计了机制，它在我的记忆中漂浮：</p>
-<p><img src="https://i.loli.net/2019/11/30/rfuTY6txJD1pUsl.png" loading=lazy alt="一个叫做 &#39;DANGER IL Y A UN HOMME ARMÉ DANS CET ÉDIFICE 3&#39; 的复古网页游戏的 HTML 表单" null /></p>
+<p><img data-src="https://i.loli.net/2019/11/30/rfuTY6txJD1pUsl.png" alt="一个叫做 &#39;DANGER IL Y A UN HOMME ARMÉ DANS CET ÉDIFICE 3&#39; 的复古网页游戏的 HTML 表单"  /></p>
 <p>“这不是真正的电子游戏，”我被这样告知，“这只是个 HTML 表单。你应该为文本和选项使用数组，那样它会变得更好。你的代码也还需要清理。”  </p>
 <p>我有些沮丧；我写了十一页文字来描绘这个游戏的“选择你的冒险”片段。不过我发现，如果我想要做一些能让更多人认同的东西，我必须学许多东西。  </p>
 <p>我必须学一些“真正的编程”。从某个 GUI 工具箱中的 JScript 语言再到某些更好的东西——比如 PHP。于是我学了 PHP，还有 JavaScript。而后，最终我又一次被告知如何真正地编程：PHP 很烂。他们告诉我可能该去试试看 Python，而那就是我接下来学的。  </p>
 <p>但是真正的程序员了解更棒的东西，python 的 lambda 还不够，也不如你想的那般是面向对象编程。“阅读《计算机程序的构造和解释》会是接下来不错的一步。”，我被这么告知，因为那本书就像是计算机科学的圣经一般。</p>
-<p><img src="https://i.loli.net/2019/11/30/7MxWUSzehOg8NTt.png" loading=lazy alt="《计算机程序的构造和解释》的封面" null /></p>
+<p><img data-src="https://i.loli.net/2019/11/30/7MxWUSzehOg8NTt.png" alt="《计算机程序的构造和解释》的封面"  /></p>
 <p>这本书教会了我 Scheme。同时我读了《C 程序设计语言》，因为现实世界的真正程序员写 C。在工作中捣鼓这些的同时，我在本地的大学参加了在职课程，因为真正的程序员懂数据结构和数学，那些我或多或少学了点的东西。我开始啃论文和书籍，因为真正的程序员总是跟得上时代还懂复杂的算法。</p>
 <blockquote>
 <p>这两本书的书名在原文中是简写和俗名。</p>
@@ -41,7 +41,7 @@
 <p>“啥？！”</p>
 <p><em>“帮我设计一个系统！”</em></p>
 <p>被这个请求惊到，我的视线离开屏幕，抬起头。看看周围，见到了这个向往成为开发者的小朋友，他希望我叫他“Printf”，这个让我觉得花里胡哨还十分傻气的名字。那个小朋友看起来有点像这样：</p>
-<p><img src="https://i.loli.net/2019/11/30/A482DZdmFyfHNWT.png" loading=lazy alt="小 Printf，戴着红黄交织的绒帽，颜色相似的围巾、绿大衣、红手套、米黄色的裤子。站在雪地中，身旁是一台坏了的笔记本电脑" null /></p>
+<p><img data-src="https://i.loli.net/2019/11/30/A482DZdmFyfHNWT.png" alt="小 Printf，戴着红黄交织的绒帽，颜色相似的围巾、绿大衣、红手套、米黄色的裤子。站在雪地中，身旁是一台坏了的笔记本电脑"  /></p>
 <p><em>“我如今还不是很懂电脑，但是你看着非常懂。我想要写程序，发和她们相关的博客，有用户和读者。求求你，帮我设计一个系统！”</em></p>
 <p>如今，这是一个让人惊异的请求；同时我还二十小时没合眼了，不太确定我是否完全理解或者对他的请求有些什么感觉。我告诉他系统都非常艰深。我不知道他想要做什么，如果系统崩溃了他希望怎么办，需要支持多少读者，想要在哪儿托管；还有我因此在信息如此之少的前提下无法设计一个正确的系统。</p>
 <p><em>“那些都不重要。帮我设计一个系统。”</em></p>
@@ -49,7 +49,7 @@
 <img src="https://i.loli.net/2019/11/30/kOKgDvi8f7uC19q.png" width="467" height="251" alt="某张复杂的架构图" />
 
 <p>他看了看，然后说：<em>“不，这个系统还不够好，给我别的。”</em>。所以我整了这个：</p>
-<p><img src="https://i.loli.net/2019/11/30/OqmyF6wZfKNASpB.png" loading=lazy alt="一张甚至更加复杂的架构图" null /></p>
+<p><img data-src="https://i.loli.net/2019/11/30/OqmyF6wZfKNASpB.png" alt="一张甚至更加复杂的架构图"  /></p>
 <blockquote>
 <p>这个架构相当复杂：</p>
 <p>Metrics + Logs：Grafana 等面板加上某些时序数据库，用来记录集群的状态，是分布式系统可观测性的重要部分。</p>
@@ -66,7 +66,7 @@
 <p>我还简单地介绍了一下它是怎么工作的。</p>
 <p>我的新朋友礼貌地笑了。<em>“这不是我想要的，它实在太复杂，还做了太多我根本不需要的事情。”</em></p>
 <p>我有点觉得被侮辱了——考虑了冗余性、监视、备份、缓存和其他机制来减少负载；还用外部支付处理来规避法律风险；以及故障恢复、易于交付，还有很多。我应该为此收取合理的咨询费用才对！耐心耗尽，我就画了这个：</p>
-<p><img src="https://i.loli.net/2019/11/30/N41xQ6bvUesyLRm.png" loading=lazy alt="一个黑盒子，下面写着“Enjoy”" null /></p>
+<p><img data-src="https://i.loli.net/2019/11/30/N41xQ6bvUesyLRm.png" alt="一个黑盒子，下面写着“Enjoy”"  /></p>
 <p>我还补充道：“这就是你的设计，整个系统就在这个黑箱里面。”。我希望这个屎一样的答案能够让他放我一马。但是我被回复惊到了：</p>
 <p><em>“这就是我想要的！”</em>
 这就是我和小 printf 的邂逅。</p>
@@ -90,10 +90,10 @@
 <p>最初选择 <code>stable-rust</code> 作为后台的开发语言，那时候它大概还是 <code>1.31</code> 的样子。没有 <code>async</code> 和 <code>await</code>，<code>tokio</code> 还需要手动设置复杂的启动函数（所幸还有 <code>actix-web</code>！)，也没有从 <code>Go</code> 借鉴的高效调度器，闭包的跨线程发送和所有权的交织让我不得不大量复制字符串——所幸还有 <code>Arc</code>，但是即便如此，当时的我对这种复杂性仍旧十分惧怕。控制流完全变成了回调地狱、<code>diesel</code> 使用的大量宏让人疑惑、复杂的类型参数让抽象变得举步维艰……还好这个服务器相当简单，简单到“不变性”的实践都可以应用于之：彼的我自然没有面对 <code>BiLock</code> 一类的勇气（现在说不定也没有）。</p>
 </blockquote>
 <h2 id="第四章">第四章</h2>
-<p><img src="https://csust.xyz/usr/uploads/2019/11/1101012558.png" loading=lazy alt="一个建筑物" null /></p>
+<p><img data-src="https://csust.xyz/usr/uploads/2019/11/1101012558.png" alt="一个建筑物"  /></p>
 <p>他到了工作区，去找寻有经验的开发者，那些可以给他提示和帮助的人们。</p>
 <p>他遇到的第一个十分傲慢的资深开发者，那人看上去感觉更加像是管理人员。</p>
-<p><img src="https://csust.xyz/usr/uploads/2019/11/2378571849.png" loading=lazy alt="一个穿着西装、戴着厚厚镜片的地中海男人。" null /></p>
+<p><img data-src="https://csust.xyz/usr/uploads/2019/11/2378571849.png" alt="一个穿着西装、戴着厚厚镜片的地中海男人。"  /></p>
 <p>“啊，来了个求学的！欢迎来到我的领域，在这儿我是专家”，他说。</p>
 <p><em>“专家？”</em>，小 Printf 问到，<em>“这是不是意味着你不管啥程序都可以写？”</em>。</p>
 <p>“没错！”专家答到。他补充：“好吧，是几乎，我只写值得去写的程序。我不在平凡的事情上浪费时间。世界中有许多程序我从未写过，但是却可以轻松写出来。”</p>
@@ -116,7 +116,7 @@
 <p>“低贱”的原文是 untouchable，这个词带有崇高的“不可触及”、“不可撼动”的含义，亦有印度种姓中“不可触碰者”的含义，此处或为双关。</p>
 </blockquote>
 <h2 id="第五章">第五章</h2>
-<p><img src="https://csust.xyz/usr/uploads/2019/11/1340342416.png" loading=lazy alt="一个男人，坐在桌子前面，身后是几个放满的书架" null /></p>
+<p><img data-src="https://csust.xyz/usr/uploads/2019/11/1340342416.png" alt="一个男人，坐在桌子前面，身后是几个放满的书架"  /></p>
 <p>小 Printf 继续往前走，到了另一间办公室的门口。这里的被一个厚厚的精装本书籍包围着的男子占据着，那些书的封面上画着精美的图案——诸如巫师、龙、分形图案、数学符号等等。</p>
 <blockquote>
 <p>“巫师”指的大概是前文提到的《计算机程序的构造和解释》。</p>
@@ -156,7 +156,7 @@
 <p>“在任何情况下，能力并不重要；名声十分宝贵。人们会雇朋友，不受喜爱和不重要的人首先会被解雇；尝试改变这个系统，你就会被厌恶。一切不过是单纯的政治游戏。这就是工业界的运作方法，很可能也是学术界的，即便我对此尚不了解，我现在在做什么？不过就是你了解的那样，卖人设，个人品牌你懂吗？在职场找工作这样行。”</p>
 <p><em>“如果事情就是这样：必须感到糟糕，同时让别人感到糟糕才能做得更好的话……我可能不想在职场有工作了。”</em>在离开此地之前，小 Printf 如是说。</p>
 <h2 id="第六章">第六章</h2>
-<p><img src="https://csust.xyz/usr/uploads/2019/11/2354608623.png" loading=lazy alt="无特征的程序员坐在显示器的背光处，桌上放了一块三明治。" null /></p>
+<p><img data-src="https://csust.xyz/usr/uploads/2019/11/2354608623.png" alt="无特征的程序员坐在显示器的背光处，桌上放了一块三明治。"  /></p>
 <p>在午饭时分，Printf 打断了一个看起来忘记吃午饭的人，在那人坐在凳子上注视他的屏幕之时，三明治随着时间逝去而变凉。</p>
 <p>那看起来像极了个可能知晓其在做什么的大忙人。Printf 问到：</p>
 <p><em>“如果主库出故障了，从库也会出问题吗？”</em></p>
@@ -172,7 +172,7 @@
 <p>“一点用都没有。编程无论如何都是坨屎。”</p>
 <p>“噢！”，他喘了口气。</p>
 <p>而后是片刻的鸦雀无声。</p>
-<p><img src="https://csust.xyz/usr/uploads/2019/11/3530282980.png" loading=lazy alt="一个燃烧着的垃圾桶，前方是烫金的牌子，牌子上写着“编程”" null /></p>
+<p><img data-src="https://csust.xyz/usr/uploads/2019/11/3530282980.png" alt="一个燃烧着的垃圾桶，前方是烫金的牌子，牌子上写着“编程”"  /></p>
 <p>那个小家伙回复，带有一丝愤慨：</p>
 <p><em>“我不相信。程序是脆弱的，但是程序员们可以通过努力让东西变得有用、变得更好。”</em></p>
 <p>没有回复到来。那时候，那个人已经打开了文档，并且解释如何从零开始启动整个集群的全新复制，然后事情看起来从糟糕变成更糟糕了。</p>
@@ -184,7 +184,7 @@
 <p><em>“你把所有东西都混在一起，把一切都搞混了。这有百万程序，多年以来，它们都相仿地运行和出错着。而大家已经使用它们、需要它们……我还知道有些程序除了孑然一台笔记本外无处运行；在单点错误下，便可以摧毁整个系统，甚至连通知都没有……而你却认为这些都无足轻重吗？”</em></p>
 <p>男人保持沉默。</p>
 <h2 id="第七章">第七章</h2>
-<p><img src="https://csust.xyz/usr/uploads/2019/11/923813468.png" loading=lazy alt="一个男人在他桌上的两个显示器前" null /></p>
+<p><img data-src="https://csust.xyz/usr/uploads/2019/11/923813468.png" alt="一个男人在他桌上的两个显示器前"  /></p>
 <blockquote>
 <p>左边电脑上的代码是 Erlang 的。</p>
 </blockquote>
@@ -218,7 +218,7 @@
 <p>小 Printf 插话：<em>“不，我不是这个意思，”</em>，他接着说，<em>“我是说，这件事是滑稽的：工具期望为我们解决问题，但是对你而言，工具自身似乎成为了问题。”</em></p>
 <p>而在男人沉默地伫立（在他新的帅气跑步机办公桌上）时，小 Printf 一蹦一跳地离开了这里。</p>
 <h2 id="第八章">第八章</h2>
-<p><img src="https://csust.xyz/usr/uploads/2019/11/845022713.png" loading=lazy alt="一个穿着紫色兜帽衫的女生，无精打采地趴在放满了瓶子和杯子的桌上。" null /></p>
+<p><img data-src="https://csust.xyz/usr/uploads/2019/11/845022713.png" alt="一个穿着紫色兜帽衫的女生，无精打采地趴在放满了瓶子和杯子的桌上。"  /></p>
 <p>在下一间办公室中，坐着一个疲倦的雇员，还有几打空咖啡罐；她用无精打采的姿势，愤怒地打字。</p>
 <p><em>“嗨，”</em>，小 Printf 说。</p>
 <p>那女人并没有停下她所做的事情。她继续激烈地打字。</p>
@@ -233,7 +233,7 @@
 <p>而后她的传呼机又响了。</p>
 <p><em>“那个女人，”</em>，小 Printf 对他自己说，在他继续踏上更远的旅途的同时，<em>“那个女人会被所有其他人轻蔑吧。那个资深专家，那个摇滚明星开发者，那个连续早期适应者。即便如此，她仍旧是那些人中唯一看起来有帮助的。也许这是因为她在思考一些除了她自己以外的事情吧。”</em></p>
 <h2 id="第九章">第九章</h2>
-<p><img src="https://csust.xyz/usr/uploads/2019/11/1417133565.png" loading=lazy alt="软件架构师坐在放了若干令文档的桌子前" null /></p>
+<p><img data-src="https://csust.xyz/usr/uploads/2019/11/1417133565.png" alt="软件架构师坐在放了若干令文档的桌子前"  /></p>
 <p>在这间建筑的角落，Printf 找到了一间大办公室，还带有展现这片土地的震撼视野的大窗户。其中坐了一位老先生，桌上摆着数以百计的文档。</p>
 <p>“啊哈，来了一位开发者。”，在 Printf 站在门道处时，男人喊道，“进来吧！”。</p>
 <p>看向窗户，小 Printf 注意到笔迹充斥在其上。在白板笔的帮助下，外部世界的视图被成吨的圆圈、箭头、圆柱体还有云遮蔽。为什么这个男人要在明明可以看到外面真正的云的时候，还要在窗户上画上云呢？所有这一切都让人充满好奇。</p>
@@ -266,7 +266,7 @@
 </blockquote>
 <p>小 Printf 离开了房间，结束了他的参观，离开了建筑。</p>
 <h2 id="第十章">第十章</h2>
-<p><img src="https://csust.xyz/usr/uploads/2019/11/682685893.png" loading=lazy alt="穿着格子衫、戴着冬帽的男人，手上拿着圣铃和写字板" null /></p>
+<p><img data-src="https://csust.xyz/usr/uploads/2019/11/682685893.png" alt="穿着格子衫、戴着冬帽的男人，手上拿着圣铃和写字板"  /></p>
 <p>小 Printf，一到外面，就碰到了一位在筹集善款的男人。</p>
 <p>“你好，”，男人说，“现在就帮帮某人，觉得怎么样？”</p>
 <p><em>“那可能让我感觉好一些，”</em>，小 Printf 回答。<em>“我在这办公室中待了一天，现在我比以往更加疑惑了。”</em></p>
@@ -282,7 +282,7 @@
 <p>“开发者已经常常遗忘这个事实；如果你不能看见某些东西，在系统上的工作会变成其本身的问题，而最具效率的解决方案就是，摆脱这个系统，如果它就是问题的话。”</p>
 <p><em>“只有当你以人的方式解决问题的时候，你才能真正地感觉‘这对了’。”</em>，小 Printf 对自己重复这段话，因而他将会记住这段话。</p>
 <h2 id="第十一章">第十一章</h2>
-<p><img src="https://csust.xyz/usr/uploads/2019/11/3262648995.png" loading=lazy alt="和之前的 Printf 一样，但是面带微笑。" null /></p>
+<p><img data-src="https://csust.xyz/usr/uploads/2019/11/3262648995.png" alt="和之前的 Printf 一样，但是面带微笑。"  /></p>
 <p>Printf，现在坐在我面前，在回家的路上。和他交流让我意识到，有多少我曾经做过的事情飘舞在那面容中，那些我钟爱的、那些我为之踏上编程之旅的。Printf 遇到的每一个人，都是我长久以往，为我自身看来，做过一天或者不知多久的角色。我曾被他们鼓励成为他们，很可能也会鼓励其他人做同样的事情。</p>
 <p>当我被“试着成为真正程序员”的游戏拖住的时候，Printf 没有。他说他可以不成为真正的程序员，因为他更加希望成为一个具有人性的程序员。</p>
 <p>如今我已为过去所困，必须确认我是否可以，和他一样，成为具有人性的程序员；或者我所做的一切是否不过只是工作。二者之间似乎没有太多值得的。</p>

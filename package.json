@@ -4,7 +4,8 @@
   "description": "A normal github page.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node scripts/gen_static_pages.js"
   },
   "repository": {
     "type": "git",
@@ -19,6 +20,7 @@
   "dependencies": {
     "highlight.js": "^10.5.0",
     "marked": "^1.2.9",
-    "pug": "^3.0.0"
+    "pug": "^3.0.0",
+    "uglifycss": "0.0.29"
   }
 }

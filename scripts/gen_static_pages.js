@@ -3,6 +3,7 @@ const marked = require('marked')
 const fs = require('fs')
 const fsp = require('fs/promises')
 const path = require('path')
+const uglifycss = require('uglifycss');
 
 marked.use({ 
     highlight: function(code, language) {
@@ -12,7 +13,7 @@ marked.use({
     },
     renderer : {
         image(href, title, text) {
-            return `<img src="${href}" loading=lazy alt="${text}" ${title && `title="${title}" data-title="${title}"`} />`
+            return `<img data-src="${href}" alt="${text}" ${(title && `title="${title}"`) || ""} />`
         }
     }
 })
@@ -21,6 +22,8 @@ const PATH_RELEASE = './docs'
 const PATH_META_DATABASE = './articles/meta.json'
 const PATH_ARTICLE_RELEASE = path.resolve(PATH_RELEASE, "articles")
 const PATH_TEMPLATE = './template'
+const PATH_SOURCES = './web-resources'
+const PATH_RELEASE_SOURCES = path.resolve(PATH_RELEASE, 'web-resources')
 const compilePug = (file) => pug.compile(
     fs.readFileSync(path.resolve(PATH_TEMPLATE, file)), 
     {
@@ -108,15 +111,57 @@ const genArticleDB = async (articlesPath) => {
 }
 
 const genWithArticles = async (articlesPath) => {
+    await fsp.mkdir(PATH_RELEASE, {recursive: true})
     const articleDB = await genArticleDB(articlesPath)
+    await fsp.mkdir(PATH_ARTICLE_RELEASE, {recursive: true})
     const writingPages = Promise.all(
         articleDB
             .map(async article => {
                 await writeArticlePage(article)
     }))
     const writingIndices = writeIndices(articleDB)
-    await Promise.all([writingPages, writingIndices, write404()])
+    await Promise.all([writingPages, writingIndices, write404(), genSources()])
 }
 
-genWithArticles("articles")
+const fileConfig = [
+    {
+        nameMatches: text => /\.css$/.test(text),
+        runWith: async (resource, target) => {
+            const css = (await fsp.readFile(resource)).toString()
+            const uglified = uglifycss.processString(css, {uglyComments: true});
+            fsp.writeFile(target, uglified)
+        }
+    },
+    {
+        nameMatches: text => /.*/.test(text),
+        runWith: async (resource, target) => {
+            const text = (await fsp.readFile(resource)).toString()
+            fsp.writeFile(target, text)
+        }
+    }
+]
+
+const genSources = async () => {
+    await fsp.mkdir(PATH_RELEASE_SOURCES, {recursive: true})
+    const files = await fsp.readdir(PATH_SOURCES)
+    await Promise.all(
+        files.map(async file => {
+            const src = await fsp.open(path.resolve(PATH_SOURCES, file), 'r')
+            const dst = await fsp.open(path.resolve(PATH_RELEASE_SOURCES, file), 'w')
+            for (const {nameMatches, runWith} of fileConfig) {
+                if (nameMatches(file)) {
+                    await runWith(src, dst)
+                }
+            }
+            await src.close()
+            await dst.close()
+        }))
+}
+
+genWithArticles("articles").catch(err => {
+    console.error(err)
+    console.error("stack info:")
+    console.error(err.stack)
+    process.exit(1)
+})
 
