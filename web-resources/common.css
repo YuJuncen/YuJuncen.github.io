@@ -330,7 +330,7 @@ li.link a {
     font-size: 20px;
 }
 
-img {
+img:not(.full) {
     max-width: calc(100% - 16px);
     max-height: 33vh;
 }

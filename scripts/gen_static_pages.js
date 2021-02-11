@@ -4,7 +4,7 @@ const fs = require('fs')
 const fsp = require('fs/promises')
 const path = require('path')
 const uglifycss = require('uglifycss');
-const fork = require('child_process');
+const childp = require('child_process');
 
 marked.use({
     highlight: function (code, language) {
@@ -131,12 +131,14 @@ const genWithArticles = async (articlesPath) => {
 const genSources = async () => {
     await fsp.mkdir(PATH_RELEASE_SOURCES, { recursive: true })
     const files = await fsp.readdir(PATH_SOURCES)
-    const uglifyCSSFiles = Promise.all(files.filter(f => /\.css$/.test(f)).map(async (file) => {
-        const css = (await fsp.readFile(path.resolve(PATH_SOURCES, file))).toString()
-        const uglified = uglifycss.processString(css, { uglyComments: true });
-        fsp.writeFile(path.resolve(PATH_RELEASE_SOURCES, file), uglified)
+    const uglifyCSSFiles = Promise.all(
+        files.filter(f => /\.css$/.test(f))
+            .map(async (file) => {
+                const css = (await fsp.readFile(path.resolve(PATH_SOURCES, file))).toString()
+                const uglified = uglifycss.processString(css, { uglyComments: true });
+                await fsp.writeFile(path.resolve(PATH_RELEASE_SOURCES, file), uglified)
     }))
-    const genTSFiles = new Promise((ok, err) => fork.exec("npx tsc", (e, stdout, stderr) => {
+    const genTSFiles = new Promise((ok, err) => childp.exec("npx tsc", (e, stdout, stderr) => {
         if (stdout) {
             console.log("TS compiler stdout", stdout)
         }
