@@ -4,14 +4,15 @@ const fs = require('fs')
 const fsp = require('fs/promises')
 const path = require('path')
 const uglifycss = require('uglifycss');
+const fork = require('child_process');
 
-marked.use({ 
-    highlight: function(code, language) {
+marked.use({
+    highlight: function (code, language) {
         const hljs = require('highlight.js');
         const validLanguage = hljs.getLanguage(language) ? language : 'plaintext';
         return hljs.highlight(validLanguage, code).value;
     },
-    renderer : {
+    renderer: {
         image(href, title, text) {
             return `<img data-src="${href}" alt="${text}" ${(title && `title="${title}"`) || ""} />`
         }
@@ -25,9 +26,9 @@ const PATH_TEMPLATE = './template'
 const PATH_SOURCES = './web-resources'
 const PATH_RELEASE_SOURCES = path.resolve(PATH_RELEASE, 'web-resources')
 const compilePug = (file) => pug.compile(
-    fs.readFileSync(path.resolve(PATH_TEMPLATE, file)), 
+    fs.readFileSync(path.resolve(PATH_TEMPLATE, file)),
     {
-        basedir: PATH_TEMPLATE, 
+        basedir: PATH_TEMPLATE,
         filename: path.resolve(PATH_TEMPLATE, file),
     })
 const TEMPLATE_ARTICLE = compilePug('article.pug')
@@ -40,10 +41,10 @@ const renderTime = t => {
     return `${t}`
 }
 
-const genIndexPage = ({articles, pageNum, maxPageNum}) => {
+const genIndexPage = ({ articles, pageNum, maxPageNum }) => {
     return TEMPLATE_INDEX({
-        articles, 
-        pageNum, 
+        articles,
+        pageNum,
         maxPageNum
     })
 }
@@ -56,17 +57,20 @@ const writeIndices = async (articles) => {
     const file = await fsp.open(path.resolve(PATH_RELEASE, "index.html"), 'w')
     await file.writeFile(genIndexPage({
         articles: articles.map(article => ({ ...article, lastUpdated: renderTime(article.lastUpdated), createdAt: renderTime(article.createdAt) })),
-        pageNum: 1, 
-        maxPageNum: 1}))
+        pageNum: 1,
+        maxPageNum: 1
+    }))
     await file.close()
 }
 
-const genArticlePage = ({name, lastUpdated, createdAt, markdownContent, tags}) => {
-    return TEMPLATE_ARTICLE({name, 
+const genArticlePage = ({ name, lastUpdated, createdAt, markdownContent, tags }) => {
+    return TEMPLATE_ARTICLE({
+        name,
         tags,
-        lastUpdated: renderTime(lastUpdated), 
+        lastUpdated: renderTime(lastUpdated),
         createdAt: renderTime(createdAt),
-        renderedContent: marked(markdownContent)})
+        renderedContent: marked(markdownContent)
+    })
 }
 
 const getMetaDatabase = async () => {
@@ -96,9 +100,9 @@ const genArticleDB = async (articlesPath) => {
         const content = (await fd.readFile()).toString()
         await fd.close()
         return {
-            name: file.replace(/\.md$/, ""), 
+            name: file.replace(/\.md$/, ""),
             tags: meta[file]?.tags || [],
-            lastUpdated, createdAt, 
+            lastUpdated, createdAt,
             markdownContent: content,
             introText: meta[file]?.introText || ""
         }
@@ -111,57 +115,48 @@ const genArticleDB = async (articlesPath) => {
 }
 
 const genWithArticles = async (articlesPath) => {
-    await fsp.mkdir(PATH_RELEASE, {recursive: true})
+    await fsp.mkdir(PATH_RELEASE, { recursive: true })
     const articleDB = await genArticleDB(articlesPath)
-    await fsp.mkdir(PATH_ARTICLE_RELEASE, {recursive: true})
+    await fsp.mkdir(PATH_ARTICLE_RELEASE, { recursive: true })
     const writingPages = Promise.all(
         articleDB
             .map(async article => {
                 await writeArticlePage(article)
-    }))
+            }))
     const writingIndices = writeIndices(articleDB)
     await Promise.all([writingPages, writingIndices, write404(), genSources()])
 }
 
-const fileConfig = [
-    {
-        nameMatches: text => /\.css$/.test(text),
-        runWith: async (resource, target) => {
-            const css = (await fsp.readFile(resource)).toString()
-            const uglified = uglifycss.processString(css, {uglyComments: true});
-            fsp.writeFile(target, uglified)
-        }
-    },
-    {
-        nameMatches: text => /.*/.test(text),
-        runWith: async (resource, target) => {
-            const text = (await fsp.readFile(resource)).toString()
-            fsp.writeFile(target, text)
-        }
-    }
-]
 
 const genSources = async () => {
-    await fsp.mkdir(PATH_RELEASE_SOURCES, {recursive: true})
+    await fsp.mkdir(PATH_RELEASE_SOURCES, { recursive: true })
     const files = await fsp.readdir(PATH_SOURCES)
-    await Promise.all(
-        files.map(async file => {
-            const src = await fsp.open(path.resolve(PATH_SOURCES, file), 'r')
-            const dst = await fsp.open(path.resolve(PATH_RELEASE_SOURCES, file), 'w')
-            for (const {nameMatches, runWith} of fileConfig) {
-                if (nameMatches(file)) {
-                    await runWith(src, dst)
-                }
-            }
-            await src.close()
-            await dst.close()
-        }))
+    const uglifyCSSFiles = Promise.all(files.filter(f => /\.css$/.test(f)).map(async (file) => {
+        const css = (await fsp.readFile(path.resolve(PATH_SOURCES, file))).toString()
+        const uglified = uglifycss.processString(css, { uglyComments: true });
+        fsp.writeFile(path.resolve(PATH_RELEASE_SOURCES, file), uglified)
+    }))
+    const genTSFiles = new Promise((ok, err) => fork.exec("npx tsc", (e, stdout, stderr) => {
+        if (stdout) {
+            console.log("TS compiler stdout", stdout)
+        }
+        if (stderr) {
+            console.error("TS compiler stderr", stderr)
+        }
+        if (e != undefined && e != null) {
+            err(e)
+            return
+        }
+        ok()
+    }))
+    await Promise.all([uglifyCSSFiles, genTSFiles])
 }
 
-genWithArticles("articles").catch(err => {
+genWithArticles("articles").catch((/** @type {Error} */ err) => {
     console.error(err)
-    console.error("stack info:")
-    console.error(err.stack)
+    if (err.stack) {
+        console.error("stack info:")
+        console.error(err.stack)
+    }
     process.exit(1)
 })
-

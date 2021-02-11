@@ -1,4 +1,4 @@
-<html> <head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link type="text/css" rel="stylesheet" href="/web-resources/common.css"/><link type="text/css" rel="stylesheet" href="/web-resources/utils.css"/><link type="text/css" rel="stylesheet" href="/web-resources/mono-blue.min.css"/><script src="/web-resources/lazyimg.js"></script><title>“抽象回调函数之路”</title></head><body><div class="desktop-only" style="position:fixed;left:8px;top:0;font-size:54px;font-weight:lighter;color:#88888844;width:calc((100% - 960px) / 2);overflow-wrap:break-word;">Work in progress</div><div class="container align-center justify-center horizontal"><p class="title" onclick="window.location='/'">“南方之诗”</p><ul class="container align-center justify-center links"><li class="link mr2"><a class="button" onclick="alert('currently WIP!')" href="#">归档</a></li><li class="link mr2"><a class="button" onclick="alert('currently WIP!')" href="#">关于</a></li></ul></div><div class="container align-center justify-center"><div class="fix-sized w100"><h1>抽象回调函数之路</h1><p><span class="badge">发布于</span><span class="info mr1">2021/2/9 下午3:51:53</span></p><p><span class="badge">更新于</span><span class="info mr1">2021/2/9 下午3:51:53</span></p><h1 id="序曲">序曲</h1>
+<html> <head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link type="text/css" rel="stylesheet" href="/web-resources/common.css"/><link type="text/css" rel="stylesheet" href="/web-resources/utils.css"/><link type="text/css" rel="stylesheet" href="/web-resources/mono-blue.css"/><script src="/web-resources/lazyimg.js"></script><title>“抽象回调函数之路”</title></head><body><div class="desktop-only" style="position:fixed;left:8px;top:0;font-size:54px;font-weight:lighter;color:#88888844;width:calc((100% - 960px) / 2);overflow-wrap:break-word;">Work in progress</div><div class="container align-center justify-center horizontal"><p class="title" onclick="window.location='/'">“南方之诗”</p><ul class="container align-center justify-center links"><li class="link mr2"><a class="button" onclick="alert('currently WIP!')" href="#">归档</a></li><li class="link mr2"><a class="button" onclick="alert('currently WIP!')" href="#">关于</a></li></ul></div><div class="container align-center justify-center"><div class="fix-sized w100"><h1>抽象回调函数之路</h1><p><span class="badge">发布于</span><span class="info mr1">2021/2/9 下午3:51:53</span></p><p><span class="badge">更新于</span><span class="info mr1">2021/2/11 上午11:42:46</span></p><h1 id="序曲">序曲</h1>
 <p>在 <code>node.js</code> 中，打开一个文件的格局与别处是不同的：</p>
 <pre><code class="language-javascript"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
 fs.readFile(__filename, <span class="hljs-function">(<span class="hljs-params">err, data</span>) =&gt;</span> {
@@ -24,19 +24,19 @@ fs.readFile(__filename, <span class="hljs-function">(<span class="hljs-params">e
 }
 </code></pre>
 <p>现在，<strong>在 CPS 的淫威之下</strong>，这样的田园牧歌般的函数已经变成不可能了；因为我们没有捕获外部函数 <code>return</code> 关键字的力量，如今的我们不可能在回调函数中切断原先函数的控制流，于是我们必须把自己的函数也给 CPS 化：</p>
-<pre><code class="language-javascript">const fs = require(&#x27;fs&#x27;);
-function peaceAndLove(file, callback) {
-    fs.readFile(file, (err, stream) =&gt; {
-  /* 这里多了一层缩进。 */
-    if(err) {
-      /* 错误处理代码必须和正常执行的代码写在一起了，而且失去了默认行为。*/
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">peaceAndLove</span>(<span class="hljs-params">file, callback</span>) </span>{
+    fs.readFile(file, <span class="hljs-function">(<span class="hljs-params">err, stream</span>) =&gt;</span> {
+  <span class="hljs-comment">/* 这里多了一层缩进。 */</span>
+    <span class="hljs-keyword">if</span>(err) {
+      <span class="hljs-comment">/* 错误处理代码必须和正常执行的代码写在一起了，而且失去了默认行为。*/</span>
       callback(err);
-      return;
+      <span class="hljs-keyword">return</span>;
     }
-      const fileContent = stream.toString();
-      callback(null, fileContent.replace(/fuck/i, \&quot;love\&quot;));
+      <span class="hljs-keyword">const</span> fileContent = stream.toString();
+      callback(<span class="hljs-literal">null</span>, fileContent.replace(<span class="hljs-regexp">/fuck/i</span>, <span class="hljs-string">&quot;love&quot;</span>));
   })         
-  /* 我们的函数返回空值，传递值的方式变成了调用传入的 callback。 */
+  <span class="hljs-comment">/* 我们的函数返回空值，传递值的方式变成了调用传入的 callback。 */</span>
 }
 </code></pre>
 <p>这样之后，我们的代码结构发生了一些变化：</p>

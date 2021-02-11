@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "outDir": "docs/web-resources",
+        "noEmitOnError": true,
+        "noImplicitAny": true,
+    },
+    "include": ["web-resources/**/*.ts"],
+    "exclude": ["docs/**"]
+}
