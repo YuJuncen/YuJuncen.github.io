@@ -14,7 +14,11 @@ marked.use({
     },
     renderer: {
         image(href, title, text) {
-            return `<img data-src="${href}" alt="${text}" ${(title && `title="${title}"`) || ""} />`
+            return `<div class="lazyimg-container container" data-src="${href}" data-alt="${text}" ${(title && `data-title="${title}"`) || ""}>
+                <div class="lazyimg-loading-placeholder container justify-center align-center">
+                    <div>“${text.replace('“','‘').replace('”','’') || "加载中的图片"}”</div>
+                </div>
+            </div>`
         }
     }
 })
@@ -138,6 +142,7 @@ const exec = (cmd) => new Promise((ok, err) => childp.exec(cmd, (e, stdout, stde
     ok([stdout, stderr])
 }))
 
+/** @type {(path: string)=>boolean} */
 const exists = async (path) => {
     try {
         await fsp.access(path)

@@ -335,6 +335,39 @@ img:not(.full) {
     max-height: 33vh;
 }
 
+@keyframes shimmer {
+    0% {
+      background-position: left;
+    }
+    50% {
+        background-position: right;
+    }
+    100% {
+        background-position: left;
+    }
+}
+
+.lazyimg-loading-placeholder {
+    min-height: 20vh;
+    min-width: 50%;
+    animation: shimmer 2s infinite;
+    background: linear-gradient(to right, var(--primary), var(--primary-darkest), var(--primary));
+    background-size: 300%;
+}
+
+.lazyimg-loading-placeholder > div {
+    padding: 1em;
+    /* override dark mode */
+    color: #F3F3F3;
+    font-size: 30px;
+    font-weight: lighter;
+    word-wrap: normal;
+}
+
+img[src] ~ .lazyimg-loading-placeholder {
+    display: none;
+}
+
 @media (max-width: 1040px) {
     .desktop-only {
         display: none;

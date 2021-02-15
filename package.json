@@ -1,6 +1,6 @@
 {
   "name": "yujuncen.github.io",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A normal github page.",
   "main": "index.js",
   "scripts": {

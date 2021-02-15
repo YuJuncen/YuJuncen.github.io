@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "outDir": "docs/web-resources",
+        "outDir": "docs/web-resources/",
         "noEmitOnError": true,
         "noImplicitAny": true,
     },
