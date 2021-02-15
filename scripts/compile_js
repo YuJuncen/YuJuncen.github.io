@@ -13,7 +13,7 @@ if [ ${#target_files} -eq 0 ]; then
     exit 1
 fi
 
-npx uglifyjs --compress --mangle "reserved=['src']" --webkit \
--o _all.js \
---source-map "root='/web-resources',url='_all.js.map'" \
+npx uglifyjs --compress --mangle --webkit \
+-o vos.js \
+--source-map "root='/web-resources',url='vos.js.map'" \
 -- $target_files
