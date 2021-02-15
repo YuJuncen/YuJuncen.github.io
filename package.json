@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node scripts/gen_static_pages.js"
+    "build": "node scripts/gen_static_pages.js",
+    "compile-js": "tsc && uglifyjs --compress --mangle -- release/web-resources/*.js"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,7 @@
     "marked": "^1.2.9",
     "pug": "^3.0.0",
     "typescript": "^4.1.5",
+    "uglify-js": "^3.12.8",
     "uglifycss": "0.0.29"
   },
   "devDependencies": {

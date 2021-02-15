@@ -8,7 +8,7 @@ var ClickImg = /** @class */ (function () {
         this.target = document.createElement('div');
         this.target.classList.add("click-img", "container", "align-center", "justify-center");
         this.target.style.minHeight = '100vh';
-        this.target.style.width = '100%';
+        this.target.style.width = '100vw';
         this.target.style.backgroundColor = 'var(--selection-color)';
         this.target.style.display = 'none';
         this.target.style.position = 'fixed';
@@ -25,6 +25,8 @@ var ClickImg = /** @class */ (function () {
         this.targetImg.style.maxHeight = '85vh';
         this.targetImg.style.maxWidth = '85vw';
         this.targetImg.style.cursor = 'zoom-in';
+        this.targetImg.style.transition = 'transform .3s';
+        this.targetImg.src = "";
         this.targetImg.classList.add('full');
         this.targetContainer.appendChild(this.targetImg);
     }
@@ -34,15 +36,14 @@ var ClickImg = /** @class */ (function () {
         this.targetImg.style.transform = "scale(" + scale + ") translate(" + x + "px, " + y + "px)";
     };
     ClickImg.prototype.draw = function (src) {
-        this.resetImage();
         this.targetImg.src = src.src;
+        this.resetImage();
     };
     ClickImg.prototype.connectToTargetImage = function () {
         var _this = this;
         this.targetImg.addEventListener('click', function (event) {
             if (_this.transforms.scale < 1.1) {
                 _this.transforms.scale = 3.0;
-                console.log("event.clientX=" + event.clientX + " this.target.clientHeight=" + _this.target.clientHeight);
                 var offsetX = _this.target.clientWidth / 2 - event.clientX;
                 var offsetY = _this.target.clientHeight / 2 - event.clientY;
                 _this.transforms.translate = [offsetX, offsetY];

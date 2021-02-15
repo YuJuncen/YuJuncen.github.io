@@ -1,0 +1,19 @@
+#! /bin/bash
+
+set -e
+
+release=${1-docs/web-resources}
+
+npx tsc
+
+cd $release
+target_files=$(echo *.js | tr ' ' '\n' | grep -vE '_all.js$')
+if [ ${#target_files} -eq 0 ]; then
+    echo "no js file found."
+    exit 1
+fi
+
+npx uglifyjs --compress --mangle "reserved=['src']" --webkit \
+-o _all.js \
+--source-map "root='/web-resources',url='_all.js.map'" \
+-- $target_files

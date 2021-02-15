@@ -1,5 +1,6 @@
 const lazyimg = () => {
-    const images = document.getElementsByTagName("img")
+    const selectedImages = document.getElementsByTagName('img')
+    const images = Array.from(selectedImages).filter(x => x.dataset['src']) as HTMLImageElement[]
     if (typeof window.IntersectionObserver != 'undefined') {
         byIntersectionObserver(images)
         return
@@ -7,7 +8,7 @@ const lazyimg = () => {
     byEager(images)
 }
 
-const byEager = (images : HTMLCollectionOf<HTMLImageElement>) => {
+const byEager = (images : HTMLImageElement[]) => {
     for (let i = 0; i < images.length; i ++) {
         const image = images[i];
         image.loading = 'lazy';
@@ -15,10 +16,10 @@ const byEager = (images : HTMLCollectionOf<HTMLImageElement>) => {
     }
 }
 
-const byIntersectionObserver = (images : HTMLCollectionOf<HTMLImageElement>) => {
+const byIntersectionObserver = (images : HTMLImageElement[]) => {
     const io = new IntersectionObserver((entries, observer) => {
         for (const entity of entries) {
-            if (entity.target instanceof HTMLImageElement && entity.isIntersecting) {
+            if (entity.isIntersecting && entity.target instanceof HTMLImageElement) {
                 const img = entity.target
                 img.src = img.dataset['src']
                 observer.unobserve(img)

@@ -22,7 +22,7 @@ class ClickImg {
         this.target = document.createElement('div')
         this.target.classList.add("click-img", "container", "align-center", "justify-center")
         this.target.style.minHeight = '100vh'
-        this.target.style.width = '100%'
+        this.target.style.width = '100vw'
         this.target.style.backgroundColor = 'var(--selection-color)'
         this.target.style.display = 'none'
         this.target.style.position = 'fixed'
@@ -41,20 +41,21 @@ class ClickImg {
         this.targetImg.style.maxHeight = '85vh'
         this.targetImg.style.maxWidth = '85vw'
         this.targetImg.style.cursor = 'zoom-in'
+        this.targetImg.style.transition = 'transform .3s'
+        this.targetImg.src = ""
         this.targetImg.classList.add('full')
         this.targetContainer.appendChild(this.targetImg)
     }
 
     draw(src: HTMLImageElement) {
-        this.resetImage()
         this.targetImg.src = src.src
+        this.resetImage()
     }
 
     connectToTargetImage() {
         this.targetImg.addEventListener('click', event => {
             if (this.transforms.scale < 1.1) {
                 this.transforms.scale = 3.0
-                console.log(`event.clientX=${event.clientX} this.target.clientHeight=${this.target.clientHeight}`)
                 const offsetX = this.target.clientWidth / 2 - event.clientX
                 const offsetY = this.target.clientHeight / 2 - event.clientY
                 this.transforms.translate = [offsetX, offsetY]

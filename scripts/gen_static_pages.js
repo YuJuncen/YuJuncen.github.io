@@ -24,7 +24,9 @@ const PATH_META_DATABASE = './articles/meta.json'
 const PATH_ARTICLE_RELEASE = path.resolve(PATH_RELEASE, "articles")
 const PATH_TEMPLATE = './template'
 const PATH_SOURCES = './web-resources'
+const PATH_BLOB = path.resolve(PATH_SOURCES, 'blob')
 const PATH_RELEASE_SOURCES = path.resolve(PATH_RELEASE, 'web-resources')
+const PATH_RELEASE_BLOB = path.resolve(PATH_RELEASE_SOURCES, 'blob')
 const compilePug = (file) => pug.compile(
     fs.readFileSync(path.resolve(PATH_TEMPLATE, file)),
     {
@@ -127,6 +129,23 @@ const genWithArticles = async (articlesPath) => {
     await Promise.all([writingPages, writingIndices, write404(), genSources()])
 }
 
+/** @type {(cmd: string)=>Promise<[string,string]>} */
+const exec = (cmd) => new Promise((ok, err) => childp.exec(cmd, (e, stdout, stderr) => {
+    if (e != undefined && e != null) {
+        err(e)
+        return
+    }
+    ok([stdout, stderr])
+}))
+
+const exists = async (path) => {
+    try {
+        await fsp.access(path)
+        return true
+    } catch {
+        return false
+    }
+}
 
 const genSources = async () => {
     await fsp.mkdir(PATH_RELEASE_SOURCES, { recursive: true })
@@ -138,20 +157,27 @@ const genSources = async () => {
                 const uglified = uglifycss.processString(css, { uglyComments: true });
                 await fsp.writeFile(path.resolve(PATH_RELEASE_SOURCES, file), uglified)
     }))
-    const genTSFiles = new Promise((ok, err) => childp.exec("npx tsc", (e, stdout, stderr) => {
-        if (stdout) {
-            console.log("TS compiler stdout", stdout)
-        }
-        if (stderr) {
-            console.error("TS compiler stderr", stderr)
-        }
-        if (e != undefined && e != null) {
-            err(e)
-            return
-        }
-        ok()
-    }))
-    await Promise.all([uglifyCSSFiles, genTSFiles])
+    const genTSFiles = exec("bash scripts/compile_js").then(([stdout, stderr]) => {
+        if (stdout) { console.log("TS compiler stdout", stdout) }
+        if (stderr) { console.error("TS compiler stderr", stderr) }
+    })
+    const copyBlob = (async () => {
+        const copyFiles = async (source, target) => fsp.readdir(source)
+            .then(arr => Promise.all(
+                arr.map(async f => {
+                    const stat = await fsp.stat(path.resolve(source, f));
+                    if (stat.isDirectory()) {
+                        if (!await exists(path.resolve(target, f))) {
+                            await fsp.mkdir(path.resolve(target, f), {'recursive': true})
+                        }
+                        await copyFiles(path.resolve(source, f), path.resolve(target, f))
+                        return
+                    }
+                    await fsp.copyFile(path.resolve(source, f), path.resolve(target, f))
+                })))
+        await copyFiles(PATH_BLOB, PATH_RELEASE_BLOB)
+    })()
+    await Promise.all([uglifyCSSFiles, genTSFiles, copyBlob])
 }
 
 genWithArticles("articles").catch((/** @type {Error} */ err) => {

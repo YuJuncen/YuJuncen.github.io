@@ -18,7 +18,7 @@ Then, put your articles into the `articles` folder, then generate the static sit
 
 ```bash
 # at project root directory.
-node scripts/gen_static_pages.js
+npm run build
 ```
 
 The pages will be generated at the `docs` folder (GitHub pages seems only supports delivering root dir or `/docs`!), 
