@@ -7,7 +7,7 @@ release=${1-docs/web-resources}
 npx tsc
 
 cd $release
-target_files=$(echo *.js | tr ' ' '\n' | grep -vE '_all.js$')
+target_files=$(echo *.js | tr ' ' '\n' | grep -vE 'vos.js$')
 if [ ${#target_files} -eq 0 ]; then
     echo "no js file found."
     exit 1
