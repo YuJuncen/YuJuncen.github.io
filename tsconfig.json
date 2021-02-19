@@ -3,6 +3,7 @@
         "outDir": "docs/web-resources/",
         "noEmitOnError": true,
         "noImplicitAny": true,
+        "sourceMap": true
     },
     "include": ["web-resources/**/*.ts"],
     "exclude": ["docs/**"]

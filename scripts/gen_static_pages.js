@@ -29,8 +29,10 @@ const PATH_ARTICLE_RELEASE = path.resolve(PATH_RELEASE, "articles")
 const PATH_TEMPLATE = './template'
 const PATH_SOURCES = './web-resources'
 const PATH_BLOB = path.resolve(PATH_SOURCES, 'blob')
+const PATH_FAVICON = path.resolve(PATH_SOURCES, 'favicons')
 const PATH_RELEASE_SOURCES = path.resolve(PATH_RELEASE, 'web-resources')
 const PATH_RELEASE_BLOB = path.resolve(PATH_RELEASE_SOURCES, 'blob')
+const PATH_RELEASE_FAVICON = path.resolve(PATH_RELEASE_SOURCES, 'favicons')
 const compilePug = (file) => pug.compile(
     fs.readFileSync(path.resolve(PATH_TEMPLATE, file)),
     {
@@ -120,6 +122,25 @@ const genArticleDB = async (articlesPath) => {
     return articlesDB.sort(comparing(article => article.createdAt))
 }
 
+const copyFiles = async (source, target) => {
+    if (!await exists(target)) {
+        await fsp.mkdir(target, {recursive: true})
+    }
+    return fsp.readdir(source)
+        .then(arr => Promise.all(
+            arr.map(async f => {
+                const stat = await fsp.stat(path.resolve(source, f));
+                if (stat.isDirectory()) {
+                    if (!await exists(path.resolve(target, f))) {
+                        await fsp.mkdir(path.resolve(target, f), {'recursive': true})
+                    }
+                    await copyFiles(path.resolve(source, f), path.resolve(target, f))
+                    return
+                }
+                await fsp.copyFile(path.resolve(source, f), path.resolve(target, f))
+            })))
+}
+
 const genWithArticles = async (articlesPath) => {
     await fsp.mkdir(PATH_RELEASE, { recursive: true })
     const articleDB = await genArticleDB(articlesPath)
@@ -142,7 +163,7 @@ const exec = (cmd) => new Promise((ok, err) => childp.exec(cmd, (e, stdout, stde
     ok([stdout, stderr])
 }))
 
-/** @type {(path: string)=>boolean} */
+/** @type {(path: string)=>Promise<boolean>} */
 const exists = async (path) => {
     try {
         await fsp.access(path)
@@ -162,27 +183,13 @@ const genSources = async () => {
                 const uglified = uglifycss.processString(css, { uglyComments: true });
                 await fsp.writeFile(path.resolve(PATH_RELEASE_SOURCES, file), uglified)
     }))
-    const genTSFiles = exec("bash scripts/compile_js").then(([stdout, stderr]) => {
-        if (stdout) { console.log("TS compiler stdout", stdout) }
-        if (stderr) { console.error("TS compiler stderr", stderr) }
+    const genTSFiles = exec("npx webpack build").then(([stdout, stderr]) => {
+        if (stdout) { console.log(">>> webpack stdout\n", stdout, "<<< end webpack stdout") }
+        if (stderr) { console.error(">>> webpack stderr\n", stderr, "<<< end webpack stderr") }
     })
-    const copyBlob = (async () => {
-        const copyFiles = async (source, target) => fsp.readdir(source)
-            .then(arr => Promise.all(
-                arr.map(async f => {
-                    const stat = await fsp.stat(path.resolve(source, f));
-                    if (stat.isDirectory()) {
-                        if (!await exists(path.resolve(target, f))) {
-                            await fsp.mkdir(path.resolve(target, f), {'recursive': true})
-                        }
-                        await copyFiles(path.resolve(source, f), path.resolve(target, f))
-                        return
-                    }
-                    await fsp.copyFile(path.resolve(source, f), path.resolve(target, f))
-                })))
-        await copyFiles(PATH_BLOB, PATH_RELEASE_BLOB)
-    })()
-    await Promise.all([uglifyCSSFiles, genTSFiles, copyBlob])
+    const copyBlob = copyFiles(PATH_BLOB, PATH_RELEASE_BLOB)
+    const copyFavicon = copyFiles(PATH_FAVICON, PATH_RELEASE_FAVICON)
+    await Promise.all([uglifyCSSFiles, genTSFiles, copyBlob, copyFavicon])
 }
 
 genWithArticles("articles").catch((/** @type {Error} */ err) => {
