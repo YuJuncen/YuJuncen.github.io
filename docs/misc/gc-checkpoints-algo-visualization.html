@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GC Checkpoint</title>
+    <script>
+        const mem = (f) => {
+            let res = undefined;
+            return () => {
+                if (res == undefined) {
+                    res = f()
+                }
+                return res
+            }
+        }
+        const createSpec = (checkpoints, mvccVersions) => (
+            {
+                checkpoints: checkpoints.sort((x, y) => y - x),
+                mvccVersions: mvccVersions.sort((x, y) => y - x),
+                "sorted": mem(() =>
+                    checkpoints.concat(mvccVersions).sort((x, y) => y - x)
+                )
+            })
+        const loadModel = () => {
+            const checkpoints = document.querySelector("#checkpoints-val");
+            const mvccVersions = document.querySelector("#mvcc-versions-val");
+            return createSpec(
+                JSON.parse(checkpoints.value),
+                JSON.parse(mvccVersions.value)
+            )
+        }
+    </script>
+    <script defer>
+        let MODEL_STATUS = createSpec([], [])
+        let ALGO_STATUS = {
+            "leftCursor": function () {
+                return this.checkpointsIdx >= MODEL_STATUS.checkpoints.length ? 9999999 : idxToGlobal(MODEL_STATUS.checkpoints[this.checkpointsIdx])
+            },
+            "rightCursor": function () {
+                return this.mvccVersionsIdx >= MODEL_STATUS.mvccVersions.length ? 9999999 : idxToGlobal(MODEL_STATUS.mvccVersions[this.mvccVersionsIdx])
+            },
+            "msg": function (msg) {
+                for (let message of this.messages) {
+                    message.is_new = false;
+                }
+                this.messages.push({
+                    msg,
+                    "is_new": true
+                })
+            },
+            "reset": function () {
+                this.checkpointsIdx = 0;
+                this.mvccVersionsIdx = 0;
+                this.init = false;
+                this.mvccVersionsStatus = [];
+                this.messages = [];
+            },
+
+            "checkpointsIdx": 0,
+            "mvccVersionsIdx": 0,
+            "mvccVersionsStatus": [],
+            "messages": [],
+        }
+        const STAT_PENDING = 0,
+            STAT_SKIP_GC = 1,
+            STAT_CHECK_GC = 2;
+        function moveTo(n, elem) {
+            if (n < 0) {
+                elem.style.transform = `translateY(-100vh)`
+                return
+            }
+            const vers = document.querySelectorAll("#items div");
+            if (n >= vers.length) {
+                elem.style.opacity = 0;
+                return
+            } 
+            elem.style.opacity = 1;
+            const rect = vers[n].getBoundingClientRect();
+            elem.style.transform = `translateY(${rect.top}px)`
+        }
+        function moveLeftTo(n) {
+            const leftArr = document.querySelector("#left-arr");
+            moveTo(n, leftArr)
+        }
+        function moveRightTo(n) {
+            const rightArr = document.querySelector("#right-arr");
+            moveTo(n, rightArr)
+        }
+        function idxToGlobal(n) {
+            return MODEL_STATUS.sorted().indexOf(n)
+        }
+        function nextStep() {
+            let m = MODEL_STATUS;
+            let s = ALGO_STATUS;
+
+            const i = s.checkpointsIdx, j = s.mvccVersionsIdx;
+            if (j >= m.mvccVersions.length) {
+                s.msg("Algorithm done.")
+            } else if (i >= m.checkpoints.length || m.checkpoints[i] < m.mvccVersions[j]) {
+                if (s.mvccVersionsStatus[j] == STAT_PENDING) {
+                    s.mvccVersionsStatus[j] = STAT_CHECK_GC;
+                    s.msg(`Will run GC checker for ${m.mvccVersions[j]} as normal as no checkpoint guards it, move down mvcc GC scanner.`);
+                } else {
+                    s.msg(`${m.mvccVersions[j]} have been saved, move down mvcc GC scanner.`);
+                }
+                s.mvccVersionsIdx++;
+            } else {
+                s.msg(`Save version ${m.mvccVersions[j]} for the GC checkpoint ${m.checkpoints[i]}, move down checkpoints pointer.`);
+                s.mvccVersionsStatus[j] = STAT_SKIP_GC;
+                s.checkpointsIdx++;
+            }
+        }
+        function maybeSyncDebug() {
+            let dbg = document.querySelector("#debug");
+            dbg.textContent = JSON.stringify({ algoStatus: ALGO_STATUS, modelStatus: MODEL_STATUS })
+        }
+        function syncAlgorithmStatus() {
+            moveLeftTo(ALGO_STATUS.leftCursor());
+            moveRightTo(ALGO_STATUS.rightCursor());
+            const mvccs = document.querySelectorAll("#items .mvcc-version")
+            const classNames = ["pending", "skip-gc", "check-gc"]
+            mvccs.forEach((ele, n) => {
+                ele.classList.remove(classNames)
+                ele.classList.add(classNames[ALGO_STATUS.mvccVersionsStatus[n]])
+            })
+            maybeSyncDebug()
+            syncMessages()
+        }
+        function syncMessages() {
+            const messages = document.querySelector("#messages");
+            messages.innerHTML = "";
+            ALGO_STATUS.messages.forEach(({ msg, is_new }) => {
+                const div = document.createElement("li");
+                div.classList.add("message", "list-group-item");
+                div.textContent = msg;
+                if (is_new) {
+                    setTimeout(() => div.classList.add("new-message"), 0)
+                }
+                messages.appendChild(div);
+            })
+        }
+        function syncModelStatus() {
+            let m = MODEL_STATUS;
+            let s = ALGO_STATUS;
+            s.reset()
+
+            let mount_at = document.querySelector("#items")
+            let checkpoints = m.checkpoints;
+            let mvccVersions = m.mvccVersions;
+
+            mount_at.innerHTML = "";
+
+            const createDiv = (...argv) => {
+                let div = document.createElement("div");
+                div.classList.add(...argv.slice(0, argv.length - 1));
+                div.textContent = argv[argv.length - 1];
+                return div;
+            }
+            const createCheckpoint = (n) => createDiv("checkpoint", n);
+            const createMvccVersion = (n) => createDiv("mvcc-version", n);
+            let i = 0, j = 0
+            while (i < checkpoints.length && j < mvccVersions.length) {
+                if (checkpoints[i] > mvccVersions[j]) {
+                    let checkpointDiv = createCheckpoint(checkpoints[i])
+                    mount_at.appendChild(checkpointDiv);
+                    i++;
+                } else {
+                    let mvccVersionDiv = createMvccVersion(mvccVersions[j])
+                    mount_at.appendChild(mvccVersionDiv);
+                    j++;
+                }
+            }
+            while (i < checkpoints.length) {
+                let checkpointDiv = createCheckpoint(checkpoints[i])
+                mount_at.appendChild(checkpointDiv);
+                i++;
+            }
+            while (j < mvccVersions.length) {
+                let mvccVersionDiv = createMvccVersion(mvccVersions[j])
+                mount_at.appendChild(mvccVersionDiv);
+                j++;
+            }
+            s.mvccVersionsStatus = m.mvccVersions.map(() => STAT_PENDING)
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            MODEL_STATUS = loadModel()
+            syncModelStatus()
+            syncAlgorithmStatus()
+        })
+    </script>
+
+    <style>
+        .input {
+            font-family: monospace;
+        }
+
+        .checkpoint {
+            font-family: monospace;
+            align-self: flex-start;
+            padding: 8px;
+            margin: 8px;
+            border: #20c997 solid 2px;
+            color: #20c997;
+        }
+
+        .mvcc-version {
+            font-family: "Menlo", "consolas", monospace;
+            align-self: flex-end;
+            padding: 8px;
+            margin: 8px;
+            transition: cubic-bezier(0.075, 0.82, 0.165, 1) 1s;
+            border-radius: 4px;
+        }
+
+        .mvcc-version.pending {
+            background-color: #f8f9fa;
+        }
+
+        .mvcc-version.skip-gc {
+            background-color: #198754;
+            color: white;
+        }
+
+        .mvcc-version.check-gc {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .arr {
+            font-family: monospace;
+            transition: all 1s;
+            font-size: 32px;
+            /* We cannot choose the baseline when rendering the text.
+                Manually fix the baseline so the arrow seems points to the center. :(*/
+            margin: -14px 0;
+            padding: 8px 0;
+            vertical-align: text-top;
+        }
+
+        .message {
+            transition: all 1s;
+        }
+
+        .message:last-of-type {
+            border-radius: 0;
+        }
+
+        .new-message {
+            background-color: #0d6efd;
+            color: white;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        #items {
+            display: flex;
+            flex-direction: column;
+            min-width: 128px;
+        }
+
+        #debug {
+            font-family: monospace;
+        }
+
+        #model-container {
+            display: flex;
+            padding-right: 16px;
+            margin-right: 16px;
+        }
+
+        #main-container {
+            max-width: 1024px;
+            margin: auto;
+        }
+
+        #control-container {
+            min-width: 256px;
+        }
+    </style>
+</head>
+
+<body id="main-container">
+    <div class="flex">
+        <div id="model-container" class="me-4">
+            <div id="left-arr" class="arr"> → </div>
+            <div id="items">
+            </div>
+            <div id="right-arr" class="arr"> ← </div>
+        </div>
+
+        <div class="card me-4" id="control-container">
+            <div class="card-header">
+                Control
+            </div>
+            <form class="p-2">
+                <label for="checkpoints-val" class="form-label">Checkpoints Input</label>
+                <textarea id="checkpoints-val" class="form-control input">[105, 65, 17]</textarea>
+                <label for="mvcc-versions-val" class="form-label">MVCC versions</label>
+                <textarea id="mvcc-versions-val" class="form-control input">[104, 103, 16, 15]</textarea>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-outline-primary mt-2"
+                        onclick="nextStep(); syncAlgorithmStatus()">Next Step</button>
+                    <button type="button" class="btn btn-outline-secondary mt-2"
+                        onclick="MODEL_STATUS = loadModel(); syncModelStatus(); syncAlgorithmStatus()">Save &
+                        Reload</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card me-4" id="messages-container" style="flex-grow: 1;">
+            <div class="card-header">
+                Messages
+            </div>
+            <ul class="list-group list-group-flush" id="messages">
+            </ul>
+        </div>
+    </div>
+    <div class="card m-4" id="messages-container">
+        <div class="card-header">
+            Legend
+        </div>
+        <ul class="list-group list-group-flush" style="list-style: none;">
+            <li class="checkpoint"> GC Checkpoint </li>
+            <li class="mvcc-version pending">MVCC version not yet checked</li>
+            <li class="mvcc-version skip-gc">MVCC version should be skipped by GC</li>
+            <li class="mvcc-version check-gc">MVCC version should be normally checked</li>
+        </ul>
+    </div>
+    <div id="debug" class="border-top p-4"> </div>
+</body>
+
+</html>

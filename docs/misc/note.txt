@@ -1,0 +1,3 @@
+这个文件夹用来存放随机的静态网页。
+
+This folder is used for random static documents. They are manually mananged.
