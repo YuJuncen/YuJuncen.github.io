@@ -1,16 +1,14 @@
 include ./common.pug
 
-mixin article(title, createdAt, lastUpdated, tags, introText)
-    .card(onclick=`window.location='/articles/${title}.html'`)
-        h1(style="margin-block-start:.15em;") #{title}
-        each tag in tags
-            .tag #{tag}
-        p
-            span.badge.mr1 创建于
-            span.info #{createdAt}
-        p
-            span.badge.mr1 更新于
-            span.info #{lastUpdated}
+mixin article(A)
+    .article(onclick=`window.location='/articles/${A.name}.html'`)
+        h1.index-title #{A.name}
+        span.at-date.inline-info #{A.createdAt.toLocaleDateString()}
+        span.tags
+            each tag in A.tags
+                .hash-tag.inline-info #{tag}
+        if A.introText
+            .intro-text #{A.introText}
 
 
 html
@@ -23,4 +21,4 @@ html
         .container.align-center.justify-center
             .fix-sized.container.horizontal.w100
                 each article in articles
-                    +article(article.name, article.createdAt, article.lastUpdated, article.tags, article.introText)
+                    +article(article)

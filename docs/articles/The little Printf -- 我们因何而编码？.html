@@ -1,4 +1,4 @@
-<html> <head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="msapplication-TileColor" content="#227D51"/><meta name="msapplication-config" content="/web-resources/favicons/browserconfig.xml"/><meta name="theme-color" content="#227D51"/><link type="text/css" rel="stylesheet" href="/web-resources/common.css"/><link type="text/css" rel="stylesheet" href="/web-resources/utils.css"/><link type="text/css" rel="stylesheet" href="/web-resources/mono-blue.css"/><link rel="apple-touch-icon" sizes="180x180" href="/web-resources/favicons/apple-touch-icon.png"/><link rel="icon" type="image/png" sizes="32x32" href="/web-resources/favicons/favicon-32x32.png"/><link rel="icon" type="image/png" sizes="16x16" href="/web-resources/favicons/favicon-16x16.png"/><link rel="manifest" href="/web-resources/favicons/site.webmanifest"/><link rel="mask-icon" href="/web-resources/favicons/safari-pinned-tab.svg"/><link rel="shortcut, icon" href="/web-resources/favicons/favicon.ico"/><link rel="manifest" href="/web-resources/favicons/manifest.json"/><script src="/web-resources/vos.js"></script><title>“The little Printf -- 我们因何而编码？”</title></head><body><div class="desktop-only" style="position:fixed;left:8px;top:0;font-size:54px;font-weight:lighter;color:#88888844;width:calc((100% - 960px) / 2);overflow-wrap:break-word;">Work in progress</div><div class="container align-center justify-center horizontal"><p class="title" onclick="window.location='/'">“南方之诗”</p><ul class="container align-center justify-center links"><li class="link mr2"><a class="button" onclick="alert('currently WIP!')" href="#">归档</a></li><li class="link mr2"><a class="button" onclick="alert('currently WIP!')" href="#">关于</a></li><li class="link mr2"><a class="button" href="https://pingcap.com">友链</a></li></ul></div><div class="container align-center justify-center"><div class="fix-sized w100"><h1>The little Printf -- 我们因何而编码？</h1><div class="tag">杂谈</div><div class="tag">观点</div><p><span class="badge">发布于</span><span class="info mr1">2021/2/10 下午1:37:27</span></p><p><span class="badge">更新于</span><span class="info mr1">2021/2/15 下午12:21:20</span></p><h2 id="译者注">译者注</h2>
+<html> <head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="msapplication-TileColor" content="#227D51"/><meta name="msapplication-config" content="/web-resources/favicons/browserconfig.xml"/><meta name="theme-color" content="#227D51"/><link type="text/css" rel="stylesheet" href="/web-resources/common.css"/><link type="text/css" rel="stylesheet" href="/web-resources/utils.css"/><link type="text/css" rel="stylesheet" href="/web-resources/mono-blue.css"/><link rel="apple-touch-icon" sizes="180x180" href="/web-resources/favicons/apple-touch-icon.png"/><link rel="icon" type="image/png" sizes="32x32" href="/web-resources/favicons/favicon-32x32.png"/><link rel="icon" type="image/png" sizes="16x16" href="/web-resources/favicons/favicon-16x16.png"/><link rel="manifest" href="/web-resources/favicons/site.webmanifest"/><link rel="mask-icon" href="/web-resources/favicons/safari-pinned-tab.svg"/><link rel="shortcut, icon" href="/web-resources/favicons/favicon.ico"/><link rel="manifest" href="/web-resources/favicons/manifest.json"/><script src="/web-resources/vos.js"></script><title>“The little Printf -- 我们因何而编码？”</title></head><body><div class="desktop-only" style="position:fixed;left:8px;top:0;font-size:54px;font-weight:lighter;color:#88888844;width:calc((100% - 960px) / 2);overflow-wrap:break-word;">Work in progress</div><div class="container align-center justify-center horizontal"><p class="title" onclick="window.location='/'">“南方之诗”</p><ul class="container align-center justify-center links"><li class="link mr2"><a class="button" href="https://pingcap.com">友链</a></li></ul></div><div class="container align-center justify-center"><div class="fix-sized w100"><h1>The little Printf -- 我们因何而编码？</h1><div class="hash-tag inline-info">杂谈</div><div class="hash-tag inline-info">观点</div><p><span class="badge">发布</span><span class="lnline-info at-date">6/1/2024, 3:40:02 PM</span></p><p><span class="badge">更新</span><span class="lnline-info at-date">6/1/2024, 3:40:02 PM</span></p><h2>译者注</h2>
 <p>这篇文章翻译自<a href="https://ferd.ca/the-little-printf.html">此处</a>。</p>
 <p>这篇文章很早之前已经有人翻译过，这个版本是我出于个人爱好的翻译。</p>
 <p>原作者是《Erlang 趣学指南》的作者 Fred Hébert，这是他在芝加哥的 <a href="http://chicago.citycode.io/">CityCode</a> 会议上的 presentation 的脚本，这个 presentation 的视频可以在 <a href="https://youtu.be/EWdqtMdcNkE">YouTube</a> 上看到。</p>
@@ -11,7 +11,7 @@
 <p>斜体字部分，像这样：</p>
 <p><em>&quot;请帮我设计一个系统！&quot;</em></p>
 <p>是小 Printf 说的话。</p>
-<h2 id="第一章">第一章</h2>
+<h2>第一章</h2>
 <p>我有幸在电脑和电子游戏普遍存在之前出生，因而有了在户外同朋友和兄弟们玩耍、发明属于我们自己游戏的福分。  </p>
 <p>我们能成为自己的英雄，用着一根小树枝，它可以成为弓箭、枪炮、短剑或者望远镜。它能变成一切——除了回力标，因为一旦你这根树枝扔出去，你必须得要跑过去给他捡回来。  </p>
 <p><div class="lazyimg-container container" data-src="/web-resources/blob/printf/image-20190925142438729.png" data-alt="回力标和树枝之间的比较" >
@@ -29,9 +29,9 @@
             </div></p>
 <p>当然，魁北克市的即兴演出有些不同；有一个滑冰场供我们表演——所有这一切完全就是曲棍球。  </p>
 <p>2005 年至 2008 年，那时我进入全日制大学学习多媒体，我最终踏入了编程工作，我发现它真的非常棒！创造力在它那儿重新归来，而且还可以让我赚钱！而后我为我的第一个游戏设计了机制，它在我的记忆中漂浮：</p>
-<p><div class="lazyimg-container container" data-src="/web-resources/blob/printf/page4image9328736.png" data-alt="一个叫做 &#39;DANGER IL Y A UN HOMME ARMÉ DANS CET ÉDIFICE 3&#39; 的复古网页游戏的 HTML 表单" >
+<p><div class="lazyimg-container container" data-src="/web-resources/blob/printf/page4image9328736.png" data-alt="一个叫做 'DANGER IL Y A UN HOMME ARMÉ DANS CET ÉDIFICE 3' 的复古网页游戏的 HTML 表单" >
                 <div class="lazyimg-loading-placeholder container justify-center align-center">
-                    <div>“一个叫做 &#39;DANGER IL Y A UN HOMME ARMÉ DANS CET ÉDIFICE 3&#39; 的复古网页游戏的 HTML 表单”</div>
+                    <div>“一个叫做 'DANGER IL Y A UN HOMME ARMÉ DANS CET ÉDIFICE 3' 的复古网页游戏的 HTML 表单”</div>
                 </div>
             </div></p>
 <p>“这不是真正的电子游戏，”我被这样告知，“这只是个 HTML 表单。你应该为文本和选项使用数组，那样它会变得更好。你的代码也还需要清理。”  </p>
@@ -50,7 +50,7 @@
 <p>《C 程序设计语言》：The K&amp;R book</p>
 </blockquote>
 <p>不知道什么时候，我选择了 Erlang 并且开始了在它之外的职业生涯——我写了一本关于它的书。严肃地说，甚至没有人过问我是不是那本书真正的作者，抑或真正的文案，或是真正的插画。真是见鬼，在甚至没有写过一个生产环境下的 Erlang 系统的前提下，我得了个教 Erlang 的职位。</p>
-<h2 id="第二章">第二章</h2>
+<h2>第二章</h2>
 <p>所以我过上了奔波各地的生活，教着人们如何做我从未完成过的事情；然而不觉地人人看起来似乎都相信我是一个真正的程序员，就因为一开始我做的那些和编程无关的事情。  </p>
 <p>一天，在打一个研讨会回家的路上，我被堵在了机场。在航站楼狂怒地码字的时候，一个奇怪、温和的声音问我：</p>
 <p><em>“如果可以的话，帮我设计一个系统！”</em></p>
@@ -101,7 +101,7 @@
 <p>我还补充道：“这就是你的设计，整个系统就在这个黑箱里面。”。我希望这个屎一样的答案能够让他放我一马。但是我被回复惊到了：</p>
 <p><em>“这就是我想要的！”</em>
 这就是我和小 printf 的邂逅。</p>
-<h2 id="第三章">第三章</h2>
+<h2>第三章</h2>
 <p>我很快熟悉了这个小家伙写的那些作品。他的仓库中只有小小的程序、简单的 Web 表单页面、平凡的命令行工具。它们平淡无奇，突然出现于世，而后迅速消失。</p>
 <p>而后某时，他开始在更大的程序中工作——那个程序使用多个模块，需要套接字、访问硬盘、和真正的数据库交流。当它第一次正确地构建、运行，小 Printf 被震惊到了。但是那个程序现在还不够。</p>
 <p>它需要重构、更好的测试、文档、风格检查、分析。这个程序会运行一段时间，而后某个早晨，它崩溃了。</p>
@@ -123,7 +123,7 @@
 <p>想起来了这个博客的一些开发历程。</p>
 <p>最初选择 <code>stable-rust</code> 作为后台的开发语言，那时候它大概还是 <code>1.31</code> 的样子。没有 <code>async</code> 和 <code>await</code>，<code>tokio</code> 还需要手动设置复杂的启动函数（所幸还有 <code>actix-web</code>！)，也没有从 <code>Go</code> 借鉴的高效调度器，闭包的跨线程发送和所有权的交织让我不得不大量复制字符串——所幸还有 <code>Arc</code>，但是即便如此，当时的我对这种复杂性仍旧十分惧怕。控制流完全变成了回调地狱、<code>diesel</code> 使用的大量宏让人疑惑、复杂的类型参数让抽象变得举步维艰……还好这个服务器相当简单，简单到“不变性”的实践都可以应用于之：彼的我自然没有面对 <code>BiLock</code> 一类的勇气（现在说不定也没有）。</p>
 </blockquote>
-<h2 id="第四章">第四章</h2>
+<h2>第四章</h2>
 <p><div class="lazyimg-container container" data-src="/web-resources/blob/printf/image-20191021231614013.png" data-alt="一个建筑物" >
                 <div class="lazyimg-loading-placeholder container justify-center align-center">
                     <div>“一个建筑物”</div>
@@ -139,7 +139,7 @@
 <p>“啊，来了个求学的！欢迎来到我的领域，在这儿我是专家”，他说。</p>
 <p><em>“专家？”</em>，小 Printf 问到，<em>“这是不是意味着你不管啥程序都可以写？”</em>。</p>
 <p>“没错！”专家答到。他补充：“好吧，是几乎，我只写值得去写的程序。我不在平凡的事情上浪费时间。世界中有许多程序我从未写过，但是却可以轻松写出来。”</p>
-<p><em>“啊，所以您可以帮我看看我的系统吗？”</em>在小 Printf 开始解释他的业务的同时，这个领域专家打断了他：</p>
+<p>*“啊，所以您可以帮我看看我的系统吗？”*在小 Printf 开始解释他的业务的同时，这个领域专家打断了他：</p>
 <p>“很抱歉，但我着实没有看到做这事儿的意义。”</p>
 <p><em>“为什么不啊？”</em></p>
 <p>“根据经验。我擅长编写那些我编写的东西，我编写那些我擅长的东西。通过在这些相当受限的、我已经擅长的事情中变得更棒，我确定我于此变得更加值钱了。安全起见叫它工作，合适起见叫它生存，但那就是我的行事之道。”</p>
@@ -157,7 +157,7 @@
 <blockquote>
 <p>“低贱”的原文是 untouchable，这个词带有崇高的“不可触及”、“不可撼动”的含义，亦有印度种姓中“不可触碰者”的含义，此处或为双关。</p>
 </blockquote>
-<h2 id="第五章">第五章</h2>
+<h2>第五章</h2>
 <p><div class="lazyimg-container container" data-src="/web-resources/blob/printf/image-20191119140508995.png" data-alt="一个男人，坐在桌子前面，身后是几个放满的书架" >
                 <div class="lazyimg-loading-placeholder container justify-center align-center">
                     <div>“一个男人，坐在桌子前面，身后是几个放满的书架”</div>
@@ -201,7 +201,7 @@
 <p><em>“这就是全部了？你不过在自己的路上自娱自乐？你这人，在擅长的事情上假装无能为力，让真正一无所知的人感觉更加糟糕；在自己不擅长的事情上又打肿脸充胖子，就这样让想要提升自我的人也感觉糟糕。”</em></p>
 <p>“在任何情况下，能力并不重要；名声十分宝贵。人们会雇朋友，不受喜爱和不重要的人首先会被解雇；尝试改变这个系统，你就会被厌恶。一切不过是单纯的政治游戏。这就是工业界的运作方法，很可能也是学术界的，即便我对此尚不了解，我现在在做什么？不过就是你了解的那样，卖人设，个人品牌你懂吗？在职场找工作这样行。”</p>
 <p><em>“如果事情就是这样：必须感到糟糕，同时让别人感到糟糕才能做得更好的话……我可能不想在职场有工作了。”</em>在离开此地之前，小 Printf 如是说。</p>
-<h2 id="第六章">第六章</h2>
+<h2>第六章</h2>
 <p><div class="lazyimg-container container" data-src="/web-resources/blob/printf/image-20191119161814172.png" data-alt="无特征的程序员坐在显示器的背光处，桌上放了一块三明治。" >
                 <div class="lazyimg-loading-placeholder container justify-center align-center">
                     <div>“无特征的程序员坐在显示器的背光处，桌上放了一块三明治。”</div>
@@ -237,7 +237,7 @@
 <p>他补充道：</p>
 <p><em>“你把所有东西都混在一起，把一切都搞混了。这有百万程序，多年以来，它们都相仿地运行和出错着。而大家已经使用它们、需要它们……我还知道有些程序除了孑然一台笔记本外无处运行；在单点错误下，便可以摧毁整个系统，甚至连通知都没有……而你却认为这些都无足轻重吗？”</em></p>
 <p>男人保持沉默。</p>
-<h2 id="第七章">第七章</h2>
+<h2>第七章</h2>
 <p><div class="lazyimg-container container" data-src="/web-resources/blob/printf/image-20191121221834741.png" data-alt="一个男人在他桌上的两个显示器前" >
                 <div class="lazyimg-loading-placeholder container justify-center align-center">
                     <div>“一个男人在他桌上的两个显示器前”</div>
@@ -275,7 +275,7 @@
 <p>“它很难！在创业公司的世界里，如果想要好同事，你需要优秀的技术栈让他们来！否则你就要和顽固的老古董们共事。没人想要成为顽固的老古董。”</p>
 <p>小 Printf 插话：<em>“不，我不是这个意思，”</em>，他接着说，<em>“我是说，这件事是滑稽的：工具期望为我们解决问题，但是对你而言，工具自身似乎成为了问题。”</em></p>
 <p>而在男人沉默地伫立（在他新的帅气跑步机办公桌上）时，小 Printf 一蹦一跳地离开了这里。</p>
-<h2 id="第八章">第八章</h2>
+<h2>第八章</h2>
 <p><div class="lazyimg-container container" data-src="/web-resources/blob/printf/image-20191123143531388.png" data-alt="一个穿着紫色兜帽衫的女生，无精打采地趴在放满了瓶子和杯子的桌上。" >
                 <div class="lazyimg-loading-placeholder container justify-center align-center">
                     <div>“一个穿着紫色兜帽衫的女生，无精打采地趴在放满了瓶子和杯子的桌上。”</div>
@@ -294,7 +294,7 @@
 <p><em>“那你实属不幸。”</em>，小 Printf 说。</p>
 <p>而后她的传呼机又响了。</p>
 <p><em>“那个女人，”</em>，小 Printf 对他自己说，在他继续踏上更远的旅途的同时，<em>“那个女人会被所有其他人轻蔑吧。那个资深专家，那个摇滚明星开发者，那个连续早期适应者。即便如此，她仍旧是那些人中唯一看起来有帮助的。也许这是因为她在思考一些除了她自己以外的事情吧。”</em></p>
-<h2 id="第九章">第九章</h2>
+<h2>第九章</h2>
 <p><div class="lazyimg-container container" data-src="/web-resources/blob/printf/image-20191126172110029.png" data-alt="软件架构师坐在放了若干令文档的桌子前" >
                 <div class="lazyimg-loading-placeholder container justify-center align-center">
                     <div>“软件架构师坐在放了若干令文档的桌子前”</div>
@@ -307,7 +307,7 @@
 <p>“噢，这个？这是我们的生产系统！”这个男人说，甚至都没想这个问题是不是关于窗外世界的。“我是软件架构师。”</p>
 <p><em>“什么是软件架构师？”</em></p>
 <p>“绝大多数时候，那是知道如何最好地构建和组织大型系统组件，让它们很好地互相配合的人。那是必须要了解数据库、语言、框架、编辑器、序列化格式、协议、高内聚低耦合一类的概念等等东西的人。”</p>
-<p><em>“那太有趣了！”</em>小 Printf 说，<em>“这儿有人可以回答我的所有问题！”</em>。他看了一眼架构图，“你的系统真的很棒！它跑得快吗？”</p>
+<p><em>“那太有趣了！”<em>小 Printf 说，</em>“这儿有人可以回答我的所有问题！”</em>。他看了一眼架构图，“你的系统真的很棒！它跑得快吗？”</p>
 <p>“我没办法告诉你，”，架构师说。“不过，它应该。”</p>
 <p><em>“那代码呢？写得好吗？”</em></p>
 <p>“我没办法告诉你。”</p>
@@ -331,7 +331,7 @@
 <p>《架构整洁之道》，后记</p>
 </blockquote>
 <p>小 Printf 离开了房间，结束了他的参观，离开了建筑。</p>
-<h2 id="第十章">第十章</h2>
+<h2>第十章</h2>
 <p><div class="lazyimg-container container" data-src="/web-resources/blob/printf/image-20191130150943306.png" data-alt="穿着格子衫、戴着冬帽的男人，手上拿着圣铃和写字板" >
                 <div class="lazyimg-loading-placeholder container justify-center align-center">
                     <div>“穿着格子衫、戴着冬帽的男人，手上拿着圣铃和写字板”</div>
@@ -341,9 +341,9 @@
 <p>“你好，”，男人说，“现在就帮帮某人，觉得怎么样？”</p>
 <p><em>“那可能让我感觉好一些，”</em>，小 Printf 回答。<em>“我在这办公室中待了一天，现在我比以往更加疑惑了。”</em></p>
 <p>“啊哈，我懂。那些人都是开发者，他们并不是真的有所帮助，不是吗？他们喜欢的是说他们正在改变这个世界，而且他们确实在这个方面很成功，事实上如此。”</p>
-<p><em>“那为啥还会感觉这么奇怪，既然如此？”</em>小 Printf 问。</p>
+<p>*“那为啥还会感觉这么奇怪，既然如此？”*小 Printf 问。</p>
 <p>“嗯，他们做得最棒的事情常常是将某些人的工作转化为程序，或者说让每个人的闲暇时光更加闲暇。软件吞食了我们的世界，它确实改变了世界的表层……但是深处仍旧是相同的旧世界，不过有了一个重整过的门脸。你感觉奇怪的缘由是，这种改变不意味着事情有一丝一毫变好了。我们仍旧面临和我们一直有的并无二样的问题和瑕疵。”</p>
-<p><em>“所以我要怎么才能感觉好一些？”</em>小 Printf 明显有些焦虑了。</p>
+<p>*“所以我要怎么才能感觉好一些？”*小 Printf 明显有些焦虑了。</p>
 <p>男人想了一下，然后邀请 Printf 去协助他帮助他人，因为他便是通过如此方式感到欣喜。这个下午， Printf 和这个人讲述了他的问题和他的冒险。在长长的沉默之后，那人说：</p>
 <p>“人们所玩的游戏、人们对权力和财富的追求和基于其的享乐、人们那种衍生于解决错综复杂问题的感情，都不过是一时之快。最后的最后，如果你没有完成任何值得的事情，如果你忽略了人们的诉求，那么你的所为将永远不会带来真正的满足。”</p>
 <p>“在你长大之后，你可能、或者不会再从你的工作区之外听到人们的诉求。这一切可能是好事，也可能不是。工作可以就是工作，可以是为了赚钱，可以是为了其中的趣味，这没问题。直到你试着在某处找到人生的意义。”</p>
@@ -351,7 +351,7 @@
 <p>“是你花在系统上的时间让它变得如此重要。”，那人补充道，“而在你不再能看见为之花时间的意义之时，当其成为一场事关尊严的游戏之时，它造成的更多是悲伤而非慰藉。”</p>
 <p>“开发者已经常常遗忘这个事实；如果你不能看见某些东西，在系统上的工作会变成其本身的问题，而最具效率的解决方案就是，摆脱这个系统，如果它就是问题的话。”</p>
 <p><em>“只有当你以人的方式解决问题的时候，你才能真正地感觉‘这对了’。”</em>，小 Printf 对自己重复这段话，因而他将会记住这段话。</p>
-<h2 id="第十一章">第十一章</h2>
+<h2>第十一章</h2>
 <p><div class="lazyimg-container container" data-src="/web-resources/blob/printf/image-20191130170513927.png" data-alt="和之前的 Printf 一样，但是面带微笑。" >
                 <div class="lazyimg-loading-placeholder container justify-center align-center">
                     <div>“和之前的 Printf 一样，但是面带微笑。”</div>

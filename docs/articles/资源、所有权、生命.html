@@ -1,22 +1,18 @@
-<html> <head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="msapplication-TileColor" content="#227D51"/><meta name="msapplication-config" content="/web-resources/favicons/browserconfig.xml"/><meta name="theme-color" content="#227D51"/><link type="text/css" rel="stylesheet" href="/web-resources/common.css"/><link type="text/css" rel="stylesheet" href="/web-resources/utils.css"/><link type="text/css" rel="stylesheet" href="/web-resources/mono-blue.css"/><link rel="apple-touch-icon" sizes="180x180" href="/web-resources/favicons/apple-touch-icon.png"/><link rel="icon" type="image/png" sizes="32x32" href="/web-resources/favicons/favicon-32x32.png"/><link rel="icon" type="image/png" sizes="16x16" href="/web-resources/favicons/favicon-16x16.png"/><link rel="manifest" href="/web-resources/favicons/site.webmanifest"/><link rel="mask-icon" href="/web-resources/favicons/safari-pinned-tab.svg"/><link rel="shortcut, icon" href="/web-resources/favicons/favicon.ico"/><link rel="manifest" href="/web-resources/favicons/manifest.json"/><script src="/web-resources/vos.js"></script><title>“资源、所有权、生命”</title></head><body><div class="desktop-only" style="position:fixed;left:8px;top:0;font-size:54px;font-weight:lighter;color:#88888844;width:calc((100% - 960px) / 2);overflow-wrap:break-word;">Work in progress</div><div class="container align-center justify-center horizontal"><p class="title" onclick="window.location='/'">“南方之诗”</p><ul class="container align-center justify-center links"><li class="link mr2"><a class="button" onclick="alert('currently WIP!')" href="#">归档</a></li><li class="link mr2"><a class="button" onclick="alert('currently WIP!')" href="#">关于</a></li><li class="link mr2"><a class="button" href="https://pingcap.com">友链</a></li></ul></div><div class="container align-center justify-center"><div class="fix-sized w100"><h1>资源、所有权、生命</h1><p><span class="badge">发布于</span><span class="info mr1">2021/2/11 下午7:16:52</span></p><p><span class="badge">更新于</span><span class="info mr1">2021/2/11 下午7:16:52</span></p><h1 id="最初的故事">最初的故事</h1>
+<html> <head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="msapplication-TileColor" content="#227D51"/><meta name="msapplication-config" content="/web-resources/favicons/browserconfig.xml"/><meta name="theme-color" content="#227D51"/><link type="text/css" rel="stylesheet" href="/web-resources/common.css"/><link type="text/css" rel="stylesheet" href="/web-resources/utils.css"/><link type="text/css" rel="stylesheet" href="/web-resources/mono-blue.css"/><link rel="apple-touch-icon" sizes="180x180" href="/web-resources/favicons/apple-touch-icon.png"/><link rel="icon" type="image/png" sizes="32x32" href="/web-resources/favicons/favicon-32x32.png"/><link rel="icon" type="image/png" sizes="16x16" href="/web-resources/favicons/favicon-16x16.png"/><link rel="manifest" href="/web-resources/favicons/site.webmanifest"/><link rel="mask-icon" href="/web-resources/favicons/safari-pinned-tab.svg"/><link rel="shortcut, icon" href="/web-resources/favicons/favicon.ico"/><link rel="manifest" href="/web-resources/favicons/manifest.json"/><script src="/web-resources/vos.js"></script><title>“资源、所有权、生命”</title></head><body><div class="desktop-only" style="position:fixed;left:8px;top:0;font-size:54px;font-weight:lighter;color:#88888844;width:calc((100% - 960px) / 2);overflow-wrap:break-word;">Work in progress</div><div class="container align-center justify-center horizontal"><p class="title" onclick="window.location='/'">“南方之诗”</p><ul class="container align-center justify-center links"><li class="link mr2"><a class="button" href="https://pingcap.com">友链</a></li></ul></div><div class="container align-center justify-center"><div class="fix-sized w100"><h1>资源、所有权、生命</h1><div class="hash-tag inline-info">未完成</div><p><span class="badge">发布</span><span class="lnline-info at-date">6/1/2024, 3:40:02 PM</span></p><p><span class="badge">更新</span><span class="lnline-info at-date">6/1/2024, 3:40:02 PM</span></p><h1>最初的故事</h1>
 <p>在我的大学生活刚刚开始的时候，我们学习了<code>C</code>语言。在那时候，给一个变量赋值还非常简单：  </p>
-<pre><code class="language-c"><span class="hljs-keyword">int</span> i = <span class="hljs-number">42</span>;
+<pre><code data-lang="c"><span class="hljs-keyword">int</span> i = <span class="hljs-number">42</span>;
 <span class="hljs-keyword">int</span> j = i;
-i = <span class="hljs-number">43</span>;
-</code></pre>
-<p>这个等号非常简洁，虽说有声明语句和赋值表达式的微妙差异；但是最终殊途同归：等号右侧被求值之后被直接写到等号左侧所指向的空间中去。如果我们没有做什么 hacking，不会有任何额外的事情发生——不会有什么钩子函数被触发，控制台中也不会突然打印出什么东西。  </p>
+i = <span class="hljs-number">43</span>;</code></pre><p>这个等号非常简洁，虽说有声明语句和赋值表达式的微妙差异；但是最终殊途同归：等号右侧被求值之后被直接写到等号左侧所指向的空间中去。如果我们没有做什么 hacking，不会有任何额外的事情发生——不会有什么钩子函数被触发，控制台中也不会突然打印出什么东西。  </p>
 <p>再后来，我们了解了堆和栈之间的差别、学会如何在程序运行的时候管操作系统要内存。那时候，听了千百次老师强调：“内存一定要记得回收。”。这句话宛如神谕，并在之后编程中常伴左右：  </p>
-<pre><code class="language-c"><span class="hljs-keyword">char</span> * hello = (<span class="hljs-keyword">char</span> *)<span class="hljs-built_in">malloc</span>(<span class="hljs-number">14</span> * <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">char</span>)); <span class="hljs-comment">// hello allocated</span>
-    <span class="hljs-built_in">strncpy</span>(hello, <span class="hljs-string">&quot;Hello, world.&quot;</span>, <span class="hljs-number">13</span>);
-    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;This is my greeting from heap: %s&quot;</span>, hello);
-<span class="hljs-built_in">free</span>(hello); <span class="hljs-comment">// hello freed</span>
-</code></pre>
-<p>老师教导我们：指针不过是一个特殊的值罢了。为了鼓励我们，他不断地展示着指针之上和数字无异的操作：加减、比较、赋值……同普通的数字一样，对指针的赋值也不会产生任何副作用，也不需要任何额外的逻辑。即便如此，不安的阴云也已经悄然升起——最初需要花一些心思才能理解：为什么数字可以用等号赋值，而对字符串这样做却可能遭受严重的问题，必须使用<code>strcpy</code>才能逃过此劫。不过我们在课程和考试中慢慢适应了这些之后，也就淡忘了这些疑问。</p>
-<h1 id="c">C++</h1>
+<pre><code data-lang="c"><span class="hljs-keyword">char</span> * hello = (<span class="hljs-keyword">char</span> *)<span class="hljs-built_in">malloc</span>(<span class="hljs-number">14</span> * <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">char</span>)); <span class="hljs-comment">// hello allocated</span>
+	<span class="hljs-built_in">strncpy</span>(hello, <span class="hljs-string">&quot;Hello, world.&quot;</span>, <span class="hljs-number">13</span>);
+	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;This is my greeting from heap: %s&quot;</span>, hello);
+<span class="hljs-built_in">free</span>(hello); <span class="hljs-comment">// hello freed</span></code></pre><p>老师教导我们：指针不过是一个特殊的值罢了。为了鼓励我们，他不断地展示着指针之上和数字无异的操作：加减、比较、赋值……同普通的数字一样，对指针的赋值也不会产生任何副作用，也不需要任何额外的逻辑。即便如此，不安的阴云也已经悄然升起——最初需要花一些心思才能理解：为什么数字可以用等号赋值，而对字符串这样做却可能遭受严重的问题，必须使用<code>strcpy</code>才能逃过此劫。不过我们在课程和考试中慢慢适应了这些之后，也就淡忘了这些疑问。</p>
+<h1>C++</h1>
 <blockquote>
 <p>我在接下来的故事中需要请到一个好朋友<code>sole</code>，这个类非常简单：它没有任何数据域，仅仅只是在被构造、移动、析构的时候打印一段文字。它接下来会帮助我们追踪<code>C++</code>的对象的生死轮回。</p>
 <p>以下是它的代码：</p>
-<pre><code class="language-c++"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">sole</span> {</span>
+<pre><code data-lang="c++"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">sole</span> {</span>
     sole() {
         <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">&quot;太阳自[&quot;</span> &lt;&lt; <span class="hljs-keyword">this</span> &lt;&lt; <span class="hljs-string">&quot;]升起，冗长的夜晚终于结束。&quot;</span> &lt;&lt; <span class="hljs-built_in">endl</span>;
     }
@@ -26,12 +22,10 @@ i = <span class="hljs-number">43</span>;
     ~sole() {
         <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">&quot;太阳跌下了[&quot;</span> &lt;&lt; <span class="hljs-keyword">this</span> &lt;&lt; <span class="hljs-string">&quot;]，吾等将迎来永夜……&quot;</span> &lt;&lt; <span class="hljs-built_in">endl</span>;
     }
-};
-</code></pre>
-</blockquote>
+};</code></pre></blockquote>
 <p>在写了无数次被<code>malloc</code>和<code>free</code>包裹着的代码之后，在若干次被字符串的赋值和数组越界困扰之后，正当我们都已经为这种无止境的模式代码感到疲倦的时候，<code>C++</code>的课程被提上了日程。  </p>
 <p><code>C++</code> 赋予了我们非常强大的力量：它允许我们自定义局部变量离开作用域时候的钩子函数——“析构函数”。这个函数和类型绑定在一起，我们发现，只要简单地为指针类型加上一层包装，就可以让系统“智能”地替我们释放内存：  </p>
-<pre><code class="language-C++"><span class="hljs-keyword">template</span>&lt;<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">T</span>&gt;</span>
+<pre><code data-lang="C++"><span class="hljs-keyword">template</span>&lt;<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">T</span>&gt;</span>
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">smart_ptr</span> {</span>
     T* __base;
 <span class="hljs-keyword">public</span>:
@@ -44,20 +38,16 @@ i = <span class="hljs-number">43</span>;
     <span class="hljs-function">T* <span class="hljs-title">get</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span> </span>{ <span class="hljs-keyword">return</span> __base; }
     T&amp; <span class="hljs-keyword">operator</span>*() <span class="hljs-keyword">const</span> { <span class="hljs-keyword">return</span> *__base; }
     T* <span class="hljs-keyword">operator</span>-&gt;() <span class="hljs-keyword">const</span> { <span class="hljs-keyword">return</span> __base; }
-};
-</code></pre>
-<p>最初测试它的时候，很快我发现已经成功了：</p>
-<pre><code class="language-c++"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+};</code></pre><p>最初测试它的时候，很快我发现已经成功了：</p>
+<pre><code data-lang="c++"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">auto</span> sun = smart_ptr&lt;sole&gt;(<span class="hljs-keyword">new</span> sole());
 }
 <span class="hljs-comment">/* Output:
  * 太阳自[0x7fc0f9400680]升起，冗长的夜晚终于结束。
  * 太阳跌下了[0x7fc0f9400680]，吾等将迎来永夜……
- */</span>
-</code></pre>
-<p>内存自动释放了！我满是欢喜和骄傲，以为自己似乎掌握了现代编程的奥妙。  </p>
+ */</span></code></pre><p>内存自动释放了！我满是欢喜和骄傲，以为自己似乎掌握了现代编程的奥妙。  </p>
 <p>不幸，在增加了几个测试之后，我的好心情很快被接踵而至的错误给击溃了。其中一个测试大概长这样：</p>
-<pre><code class="language-c++"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+<pre><code data-lang="c++"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">auto</span> sun = smart_ptr&lt;sole&gt;(<span class="hljs-keyword">new</span> sole());
     <span class="hljs-keyword">auto</span> sun2 = sun;
 }
@@ -68,11 +58,9 @@ i = <span class="hljs-number">43</span>;
  * a.out(16499,0x10e1455c0) malloc: *** error for object 0x7fd038400680: pointer being freed was not allocated
  * a.out(16499,0x10e1455c0) malloc: *** set a breakpoint in malloc_error_break to debug
  * fish: &#x27;./a.out&#x27; terminated by signal SIGABRT (Abort)
- */</span>
-</code></pre>
-<p>因为对指针的复制仅仅是肤浅地拷贝指针值，所以——有两个<code>smart_ptr</code>指向了同一个太阳。两个聪明的孩子争相在离开作用域的时候为我们释放内存，进而导致<code>malloc</code>向我们抱怨它释放了没有被分配的空间。  </p>
+ */</span></code></pre><p>因为对指针的复制仅仅是肤浅地拷贝指针值，所以——有两个<code>smart_ptr</code>指向了同一个太阳。两个聪明的孩子争相在离开作用域的时候为我们释放内存，进而导致<code>malloc</code>向我们抱怨它释放了没有被分配的空间。  </p>
 <p>我隐隐约约能感觉到，在<code>C++</code>中，<code>=</code>的意义已经不再像<code>C</code>中那么简单。想要让系统能够替我释放内存，可能需要更多的努力。其背后隐藏着的，则是一段冒险的开端。  </p>
-<h1 id="这是我的！">“这是我的！”</h1>
+<h1>“这是我的！”</h1>
 <p>对一个对象进行深度拷贝的代价往往不低。因为对象不仅仅包含着它自身，还有其背后所拥有的“资源”。  </p>
 <p>什么样的东西才算资源呢？经验告诉我们，那些配被叫做“资源”的往往都会带有某种稀缺性：</p>
 <ul>
@@ -89,15 +77,13 @@ i = <span class="hljs-number">43</span>;
 <p>如果做好了这几点，那么对象便可以相对安全地持有资源。</p>
 <p>在之前的努力中，<code>smart_ptr</code>便持有着一段堆空间地址的资源——这只是一开始的想法；后来我发现，它还借助它持有的对象持有那个对象的资源。因此，<code>smart_ptr</code>的赋值不能简单地一个个域地拷贝——这样是对资源的不负责任。</p>
 <p>在想到更好的解决方案之前，我决定宁为玉碎不为瓦全——删除拷贝构造函数和拷贝赋值函数：</p>
-<pre><code class="language-c++"><span class="hljs-keyword">template</span>&lt;&gt;
+<pre><code data-lang="c++"><span class="hljs-keyword">template</span>&lt;&gt;
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">smart_ptr</span> {</span>
   <span class="hljs-comment">// ... omited old field/methods.</span>
-    smart_ptr(<span class="hljs-keyword">const</span> smart_ptr&lt;T&gt; &amp; other) = <span class="hljs-keyword">delete</span>;
-    smart_ptr&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-keyword">const</span> smart_ptr&lt;T&gt; &amp; other) = <span class="hljs-keyword">delete</span>;
-}
-</code></pre>
-<p>……于是，一开始的那个错误变成了编译期的错误：</p>
-<pre><code class="language-c++"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+	smart_ptr(<span class="hljs-keyword">const</span> smart_ptr&lt;T&gt; &amp; other) = <span class="hljs-keyword">delete</span>;
+	smart_ptr&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-keyword">const</span> smart_ptr&lt;T&gt; &amp; other) = <span class="hljs-keyword">delete</span>;
+}</code></pre><p>……于是，一开始的那个错误变成了编译期的错误：</p>
+<pre><code data-lang="c++"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">auto</span> sun = smart_ptr&lt;sole&gt;(<span class="hljs-keyword">new</span> sole());
     <span class="hljs-keyword">auto</span> sun2 = sun;
 }
@@ -105,18 +91,14 @@ i = <span class="hljs-number">43</span>;
  * bar.cpp:44:10: error: call to deleted constructor of &#x27;smart_ptr&lt;sole&gt;&#x27;
  *     auto sun2 = sun;
  *          ^      ~~~
- */</span>
-</code></pre>
-<p>虽然结果上并没有改变什么，但是至少阻止了难看的运行时错误。</p>
-<h1 id="借我一下">借我一下……</h1>
+ */</span></code></pre><p>虽然结果上并没有改变什么，但是至少阻止了难看的运行时错误。</p>
+<h1>借我一下……</h1>
 <p>独享的乐趣很快便迎来了末路，起因则是一个普通的函数：</p>
-<pre><code class="language-c++"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">praise_the_sun</span><span class="hljs-params">(smart_ptr&lt;sole&gt; the_sole)</span> </span>{
+<pre><code data-lang="c++"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">praise_the_sun</span><span class="hljs-params">(smart_ptr&lt;sole&gt; the_sole)</span> </span>{
     <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">&quot;您在[&quot;</span> &lt;&lt; the_sole.get() &lt;&lt; <span class="hljs-string">&quot;]照耀着我们，赞美太阳！&quot;</span> &lt;&lt; <span class="hljs-built_in">endl</span>;
-}
-</code></pre>
-<p>这个函数对<code>smart_ptr</code>有着强大的依赖，事实上算不上太优秀的设计。但是那时候年轻的我希望能够在处处用上这个智能指针，以此来安慰自己不会有任何内存忘记被释放，于是我逼着自己在此处写上<code>smart_ptr</code>作为参数类型。</p>
+}</code></pre><p>这个函数对<code>smart_ptr</code>有着强大的依赖，事实上算不上太优秀的设计。但是那时候年轻的我希望能够在处处用上这个智能指针，以此来安慰自己不会有任何内存忘记被释放，于是我逼着自己在此处写上<code>smart_ptr</code>作为参数类型。</p>
 <p>然后……很明显地，问题出现了：</p>
-<pre><code class="language-c++"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+<pre><code data-lang="c++"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">auto</span> ptr = smart_ptr&lt;sole&gt;(<span class="hljs-keyword">new</span> sole());
     praise_the_sun(ptr);
 }
@@ -124,13 +106,9 @@ i = <span class="hljs-number">43</span>;
  * bar.cpp:45:20: error: call to deleted constructor of &#x27;smart_ptr&lt;sole&gt;&#x27;
  *     praise_the_sun(ptr);
  *                    ^~~
- */</span>
-</code></pre>
-<p>我无法调用这个函数，因为传递参数的时候会隐式调用拷贝构造函数；而<code>smart_ptr</code>的拷贝构造函数已经被我删掉了。</p>
+ */</span></code></pre><p>我无法调用这个函数，因为传递参数的时候会隐式调用拷贝构造函数；而<code>smart_ptr</code>的拷贝构造函数已经被我删掉了。</p>
 <p>熟悉<code>C++</code>的人很快就会给出解决之道：使用引用而非值。</p>
-<pre><code class="language-c++"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">praise_the_sun</span><span class="hljs-params">(<span class="hljs-keyword">const</span> smart_ptr&lt;sole&gt;&amp; the_sole)</span> </span>{
+<pre><code data-lang="c++"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">praise_the_sun</span><span class="hljs-params">(<span class="hljs-keyword">const</span> smart_ptr&lt;sole&gt;&amp; the_sole)</span> </span>{
     <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">&quot;您在[&quot;</span> &lt;&lt; the_sole.get() &lt;&lt; <span class="hljs-string">&quot;]照耀着我们，赞美太阳！&quot;</span> &lt;&lt; <span class="hljs-built_in">endl</span>;
-}
-</code></pre>
-<p>获得某个对象的引用不会改变资源的所有权：因为引用说到底不过是一个悄悄指向对象的指针罢了。</p>
+}</code></pre><p>获得某个对象的引用不会改变资源的所有权：因为引用说到底不过是一个悄悄指向对象的指针罢了。</p>
 </div></div></body></html>

@@ -9,6 +9,7 @@
     --selection-color:  #025D3133;
     --secondary: #86C166;
     --secondary-darker: #66A146;
+    --secondary-text: #373C38;
     --sans-serif: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     --monospace: 'Menlo', 'Consolas', 'Source Code Pro', monospace;
     --serif: '宋体', Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
@@ -25,6 +26,7 @@
         --primary-darkest: #62BD91;
         --secondary: #86C166;
         --secondary-darker: #A6E186;
+        --secondary-text: #F3F3F3;
         --selection-color: #62BD9133;
     }
 }
@@ -156,7 +158,6 @@ ul li::before {
 }
 
 blockquote {
-    background-color: var(--white-darker);
     border-left: solid 2px var(--secondary);
     margin-inline-start: 0;
     padding-inline-start: 20px;
@@ -166,9 +167,12 @@ blockquote {
     margin-inline-end: 0px;
 }
 
+blockquote p {
+    margin: 8px 0;
+}
+
 pre {
     overflow-x: auto;
-    background-color: var(--white-darker);
     margin-inline-start: 0;
     padding-block-start: .5em;
     margin-block-start: 1em;
@@ -177,6 +181,7 @@ pre {
     padding-inline-end: 40px;
     margin-block-end: 1em;
     font-size: 16px;
+    border-left: solid 2px var(--variables);
 }
 
 pre code {
@@ -190,39 +195,51 @@ pre code * {
 }
 
 h1::before {
-    content: "#";
+    content: "|";
     color: var(--primary);
     margin-inline-end: .5em;
 }
 
 h2::before {
-    content: "##";
+    content: "||";
     color: var(--primary);
     margin-inline-end: .5em;
 }
 
 h3::before {
-    content: "###";
+    content: "|||";
     color: var(--primary);
     margin-inline-end: .5em;
 }
 
 h4::before {
-    content: "####";
+    content: "||||";
     color: var(--secondary);
     margin-inline-end: .5em;
 }
 
 h5::before {
-    content: "#####";
+    content: "|||||";
     color: var(--secondary);
     margin-inline-end: .5em;
 }
 
 h6::before {
-    content: "######";
+    content: "||||||";
     color: var(--secondary);
     margin-inline-end: .5em;
+}
+
+.index-title {
+    margin-block-end: 10px;
+    margin-block-start: 10px;
+    font-size: 32px;
+}
+
+.intro-text {
+    margin-block-start: 10px;
+    margin-block-end: 10px;
+    color: var(--secondary-text);
 }
 
 .info {
@@ -271,40 +288,44 @@ h6::before {
     color: var(--secondary);
 }
 
-.tag::before {
+.at-date::before {
+    content: "@ ";
+    color: var(--secondary);
+}
+
+.hash-tag::before {
     content: "# ";
     color: var(--secondary);
 }
 
-.tag {
+.inline-info {
     display: inline;
     font-family: var(--sans-serif);
     color: var(--black);
     padding-top: 2px;
     padding-bottom: 2px;
-    padding-inline-start: .3em;
     padding-inline-end: .5em;
     margin-inline-end: .75em;
 }
 
-.card {
+.article {
     transition: background .3s;
-    margin: 4px 2px;
-    padding: 8px 24px;
+    margin: 24px 2px 0 2px;
+    padding: 24px;
     border-radius: 4px;
 }
 
-.card:hover {
+.article:hover {
     background-color: var(--white-darker);
 }
 
-.card:active {
+.article:active {
     background-color: var(--white-darkest);
 }
 
 .title {
     font-size: 32px;
-    font-weight: bolder;
+    font-weight: lighter;
     font-family: var(--serif);
     margin-block-end: 16px;
 }

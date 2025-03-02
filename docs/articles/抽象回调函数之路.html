@@ -1,52 +1,46 @@
-<html> <head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="msapplication-TileColor" content="#227D51"/><meta name="msapplication-config" content="/web-resources/favicons/browserconfig.xml"/><meta name="theme-color" content="#227D51"/><link type="text/css" rel="stylesheet" href="/web-resources/common.css"/><link type="text/css" rel="stylesheet" href="/web-resources/utils.css"/><link type="text/css" rel="stylesheet" href="/web-resources/mono-blue.css"/><link rel="apple-touch-icon" sizes="180x180" href="/web-resources/favicons/apple-touch-icon.png"/><link rel="icon" type="image/png" sizes="32x32" href="/web-resources/favicons/favicon-32x32.png"/><link rel="icon" type="image/png" sizes="16x16" href="/web-resources/favicons/favicon-16x16.png"/><link rel="manifest" href="/web-resources/favicons/site.webmanifest"/><link rel="mask-icon" href="/web-resources/favicons/safari-pinned-tab.svg"/><link rel="shortcut, icon" href="/web-resources/favicons/favicon.ico"/><link rel="manifest" href="/web-resources/favicons/manifest.json"/><script src="/web-resources/vos.js"></script><title>“抽象回调函数之路”</title></head><body><div class="desktop-only" style="position:fixed;left:8px;top:0;font-size:54px;font-weight:lighter;color:#88888844;width:calc((100% - 960px) / 2);overflow-wrap:break-word;">Work in progress</div><div class="container align-center justify-center horizontal"><p class="title" onclick="window.location='/'">“南方之诗”</p><ul class="container align-center justify-center links"><li class="link mr2"><a class="button" onclick="alert('currently WIP!')" href="#">归档</a></li><li class="link mr2"><a class="button" onclick="alert('currently WIP!')" href="#">关于</a></li><li class="link mr2"><a class="button" href="https://pingcap.com">友链</a></li></ul></div><div class="container align-center justify-center"><div class="fix-sized w100"><h1>抽象回调函数之路</h1><p><span class="badge">发布于</span><span class="info mr1">2021/2/9 下午3:51:53</span></p><p><span class="badge">更新于</span><span class="info mr1">2021/2/11 上午11:42:46</span></p><h1 id="序曲">序曲</h1>
+<html> <head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="msapplication-TileColor" content="#227D51"/><meta name="msapplication-config" content="/web-resources/favicons/browserconfig.xml"/><meta name="theme-color" content="#227D51"/><link type="text/css" rel="stylesheet" href="/web-resources/common.css"/><link type="text/css" rel="stylesheet" href="/web-resources/utils.css"/><link type="text/css" rel="stylesheet" href="/web-resources/mono-blue.css"/><link rel="apple-touch-icon" sizes="180x180" href="/web-resources/favicons/apple-touch-icon.png"/><link rel="icon" type="image/png" sizes="32x32" href="/web-resources/favicons/favicon-32x32.png"/><link rel="icon" type="image/png" sizes="16x16" href="/web-resources/favicons/favicon-16x16.png"/><link rel="manifest" href="/web-resources/favicons/site.webmanifest"/><link rel="mask-icon" href="/web-resources/favicons/safari-pinned-tab.svg"/><link rel="shortcut, icon" href="/web-resources/favicons/favicon.ico"/><link rel="manifest" href="/web-resources/favicons/manifest.json"/><script src="/web-resources/vos.js"></script><title>“抽象回调函数之路”</title></head><body><div class="desktop-only" style="position:fixed;left:8px;top:0;font-size:54px;font-weight:lighter;color:#88888844;width:calc((100% - 960px) / 2);overflow-wrap:break-word;">Work in progress</div><div class="container align-center justify-center horizontal"><p class="title" onclick="window.location='/'">“南方之诗”</p><ul class="container align-center justify-center links"><li class="link mr2"><a class="button" href="https://pingcap.com">友链</a></li></ul></div><div class="container align-center justify-center"><div class="fix-sized w100"><h1>抽象回调函数之路</h1><p><span class="badge">发布</span><span class="lnline-info at-date">6/1/2024, 3:40:02 PM</span></p><p><span class="badge">更新</span><span class="lnline-info at-date">6/1/2024, 3:40:02 PM</span></p><h1>序曲</h1>
 <p>在 <code>node.js</code> 中，打开一个文件的格局与别处是不同的：</p>
-<pre><code class="language-javascript"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
+<pre><code data-lang="javascript"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
 fs.readFile(__filename, <span class="hljs-function">(<span class="hljs-params">err, data</span>) =&gt;</span> {
     <span class="hljs-keyword">if</span> (err) {
         <span class="hljs-built_in">console</span>.error(<span class="hljs-string">&quot;Failed to read file beacuse: &quot;</span>, e);
         process.exit(<span class="hljs-number">1</span>);
     }
     <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;data readed: \n&quot;</span> + data);
-})
-</code></pre>
-<p>读文件的函数不再返回值，而是让我们传递一个“回调函数”，供文件 IO 完成之后执行。</p>
+})</code></pre><p>读文件的函数不再返回值，而是让我们传递一个“回调函数”，供文件 IO 完成之后执行。</p>
 <p>一些人会管这个叫做 <strong>continuation passing style</strong> ，即 <strong>CPS</strong>。其中的 continuation 指的就是那个冗长的回调函数，continuation 在这里的意思是“计算的延续”。</p>
 <p>将函数变成这样并不是没有意义——比如可以暂存完成读文件之后的代码，马上执行接下来的代码，然后等到硬件完成 IO 之后重启（在我的印象中，大部分操作系统都会提供这样的机制，诸如 Linux 的 <code>epoll</code> 或者 BSD 的 <code>kqueue</code>）。于是能够让整个程序运行时无需阻塞地等待硬件 IO，进而多路复用有限的几个线程——这样的“多线程”完全是在用户空间中实现的，所以能够拥有相当高的效率（当然也不是没有代价）。 </p>
-<h1 id="回调地狱">回调地狱</h1>
+<h1>回调地狱</h1>
 <p>罪恶的根源之一在于：函数的返回现在用一种不同于往常的方式给出——即是将“返回值”注入到回调函数的参数中去。</p>
 <p>在过去，天还很蓝，水还很清。时间过得很慢。</p>
 <p>所有的函数返回都是由调用者获得之后，自己决定该啥时候使用它——他可以慢悠悠地读到的文件解析成为 JSON，或者将其中每一个 <em>fuck</em> 变成 <em>love</em> ，然后再将它返回给调用自己的人。</p>
-<pre><code class="language-javascript"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
+<pre><code data-lang="javascript"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">peaceAndLove</span>(<span class="hljs-params">file</span>) </span>{
   <span class="hljs-keyword">const</span> stream = fs.readFileSync(file);
   <span class="hljs-keyword">const</span> fileContent = stream.toString();
   <span class="hljs-keyword">return</span> fileContent.replace(<span class="hljs-regexp">/fuck/i</span>, <span class="hljs-string">&quot;love&quot;</span>);
-}
-</code></pre>
-<p>现在，<strong>在 CPS 的淫威之下</strong>，这样的田园牧歌般的函数已经变成不可能了；因为我们没有捕获外部函数 <code>return</code> 关键字的力量，如今的我们不可能在回调函数中切断原先函数的控制流，于是我们必须把自己的函数也给 CPS 化：</p>
-<pre><code class="language-javascript"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
+}</code></pre><p>现在，<strong>在 CPS 的淫威之下</strong>，这样的田园牧歌般的函数已经变成不可能了；因为我们没有捕获外部函数 <code>return</code> 关键字的力量，如今的我们不可能在回调函数中切断原先函数的控制流，于是我们必须把自己的函数也给 CPS 化：</p>
+<pre><code data-lang="javascript"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">peaceAndLove</span>(<span class="hljs-params">file, callback</span>) </span>{
-    fs.readFile(file, <span class="hljs-function">(<span class="hljs-params">err, stream</span>) =&gt;</span> {
+	fs.readFile(file, <span class="hljs-function">(<span class="hljs-params">err, stream</span>) =&gt;</span> {
   <span class="hljs-comment">/* 这里多了一层缩进。 */</span>
     <span class="hljs-keyword">if</span>(err) {
       <span class="hljs-comment">/* 错误处理代码必须和正常执行的代码写在一起了，而且失去了默认行为。*/</span>
       callback(err);
       <span class="hljs-keyword">return</span>;
     }
-      <span class="hljs-keyword">const</span> fileContent = stream.toString();
-      callback(<span class="hljs-literal">null</span>, fileContent.replace(<span class="hljs-regexp">/fuck/i</span>, <span class="hljs-string">&quot;love&quot;</span>));
+  	<span class="hljs-keyword">const</span> fileContent = stream.toString();
+  	callback(<span class="hljs-literal">null</span>, fileContent.replace(<span class="hljs-regexp">/fuck/i</span>, <span class="hljs-string">&quot;love&quot;</span>));
   })         
   <span class="hljs-comment">/* 我们的函数返回空值，传递值的方式变成了调用传入的 callback。 */</span>
-}
-</code></pre>
-<p>这样之后，我们的代码结构发生了一些变化：</p>
+}</code></pre><p>这样之后，我们的代码结构发生了一些变化：</p>
 <ul>
 <li>传输匿名的回调函数会让缩进多上一层。</li>
 <li>没有了 try-catch 结构，因此错误失去了默认行为——向上级调用者抛出；因此必须手动来处理它：即将其传给回调函数。</li>
 <li>我们的函数变得不太像是函数了：它没有返回值，完全靠副作用来完成计算。</li>
 </ul>
 <p>一旦代码的结构变得复杂，我们需要组合多个这样的返回值的时候，马上就会发生有些可怕的事情：</p>
-<pre><code class="language-javascript"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
+<pre><code data-lang="javascript"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">concatFile3</span>(<span class="hljs-params">file1, file2, file3, callback</span>) </span>{
   fs.readFile(file1, <span class="hljs-function">(<span class="hljs-params">err1, data1</span>) =&gt;</span> {
     fs.readFile(file2, <span class="hljs-function">(<span class="hljs-params">err2, data2</span>) =&gt;</span> {
@@ -60,20 +54,16 @@ fs.readFile(__filename, <span class="hljs-function">(<span class="hljs-params">e
       })
     })
   })
-}
-</code></pre>
-<p>这种层层叠叠的代码非常让人沮丧：它和我们熟悉的编程差得太远了——诡异的返回方式、完全冗余的错误处理、&gt; 号形状的代码……回头看看，排除掉一些觉得这样很酷的奇才，过去的生活大概大家都会怀念吧：</p>
-<pre><code class="language-javascript"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
+}</code></pre><p>这种层层叠叠的代码非常让人沮丧：它和我们熟悉的编程差得太远了——诡异的返回方式、完全冗余的错误处理、&gt; 号形状的代码……回头看看，排除掉一些觉得这样很酷的奇才，过去的生活大概大家都会怀念吧：</p>
+<pre><code data-lang="javascript"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">concatFile3</span>(<span class="hljs-params">file1, file2, file3</span>) </span>{
   <span class="hljs-keyword">const</span> data1 = fs.readFileSync(file1);
   <span class="hljs-keyword">const</span> data2 = fs.readFileSync(file2);
   <span class="hljs-keyword">const</span> data3 = fs.readFileSync(file3);
   <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${data1}</span><span class="hljs-subst">${data2}</span><span class="hljs-subst">${data3}</span>`</span>;
-}
-</code></pre>
-<p>是时候了。拿起我们的智慧和想象力，在 CPS 统治的世界之下夺回我们的故乡吧。虽然道阻且长，虽然颇为迷惘，但我们还有强大的伙伴：First-class Functions——我们能够将函数作为值传递，而函数恰恰是编程语言的世界中数不尽奇迹的根源之一。</p>
+}</code></pre><p>是时候了。拿起我们的智慧和想象力，在 CPS 统治的世界之下夺回我们的故乡吧。虽然道阻且长，虽然颇为迷惘，但我们还有强大的伙伴：First-class Functions——我们能够将函数作为值传递，而函数恰恰是编程语言的世界中数不尽奇迹的根源之一。</p>
 <p>于是出发吧。我们的工作最终会将异步的 <code>concatFile3</code> 变得和同步的 <code>concatFile3</code> 非常相似，但是仍旧保持着异步非阻塞调用的特性。我们会在异步的世界中找到让人怀念的归宿、还有一种对于这些类型——持有上下文的值们的共同类型的通用抽象方法。</p>
-<h1 id="重新拥有返回值">重新拥有返回值</h1>
+<h1>重新拥有返回值</h1>
 <p>CPS 函数仅仅使用回调函数来描绘接下来的计算，我们所需要的“返回值”被封存在了回调函数的参数之中。</p>
 <p>这里，一种在函数式语言中广泛使用的技术——局部施用（partial application）能够帮到我们。给出一个函数和几个参数，将这几个参数“绑定”到那个函数中去，然后产生一个新的函数。这时候，新生的函数的前几个参数都会以我们刚才的那几个参数作为“默认值”，我们只需要给出剩余的参数即可。</p>
 <p>另外值得一提的事情是，局部施用的行为几乎就是 Javascript 中 <code>bind</code> 函数的行为。</p>
@@ -82,7 +72,7 @@ fs.readFile(__filename, <span class="hljs-function">(<span class="hljs-params">e
 <p> 一个例子就是下面的 <code>onCallPartialApplyReadFile</code> 函数，它其实就是柯里化之后的 <code>fs.readFile</code>。</p>
 </blockquote>
 <p>我们这样改写 <code>fs.readFile</code> ：</p>
-<pre><code class="language-javascript"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
+<pre><code data-lang="javascript"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
 <span class="hljs-comment">// 接受 file 参数，然后返回接受 callback 的函数</span>
 <span class="hljs-keyword">const</span> onCallPartialApplyReadFile = <span class="hljs-function"><span class="hljs-params">file</span> =&gt;</span> <span class="hljs-function"><span class="hljs-params">callback</span> =&gt;</span> fs.readFile(file, callback);
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">concatFile3</span>(<span class="hljs-params">file1, file2, file3</span>) </span>{
@@ -90,7 +80,7 @@ fs.readFile(__filename, <span class="hljs-function">(<span class="hljs-params">e
   <span class="hljs-keyword">const</span> dataCPS2 = onCallPartialApplyReadFile(file2);
   <span class="hljs-keyword">const</span> dataCPS3 = onCallPartialApplyReadFile(file3);
   <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-params">callback</span> =&gt;</span> dataCPS1(<span class="hljs-function">(<span class="hljs-params">err1, data1</span>) =&gt;</span> {
-       dataCPS2(<span class="hljs-function">(<span class="hljs-params">err2, data2</span>) =&gt;</span> {
+   	dataCPS2(<span class="hljs-function">(<span class="hljs-params">err2, data2</span>) =&gt;</span> {
       dataCPS3(<span class="hljs-function">(<span class="hljs-params">err3, data3</span>) =&gt;</span> {
         <span class="hljs-keyword">let</span> e;
         <span class="hljs-keyword">if</span> (e = err1 || err2 || err3) {
@@ -101,21 +91,17 @@ fs.readFile(__filename, <span class="hljs-function">(<span class="hljs-params">e
       })
     })
   })
-}
-</code></pre>
-<p>在这里，<code>dataCPSx</code> 是一个仅仅接受一个回调函数的函数。在获得回调函数之后，他会将蕴藏在其中的值（也可能是错误）无私地交给回调函数。</p>
+}</code></pre><p>在这里，<code>dataCPSx</code> 是一个仅仅接受一个回调函数的函数。在获得回调函数之后，他会将蕴藏在其中的值（也可能是错误）无私地交给回调函数。</p>
 <p><code>dataCPSx</code> 完全不接受多余的参数——它的参数仅仅只有一个回调函数而已。他就像是一个盒子，封印着本该属于我们的文件。而获得那东西的方式呢？就是传递进去一个回调函数。虽然在我们和文件之间隔了一层隔阂，但是说到底，认为 <code>dataCPSx</code> 是值、是变量、是我们要打开的文件本身是完全没问题的吧——毕竟，我们只要传递一个回调函数，就可以立即获得我们的文件。</p>
 <p>现在我们可以这样用 <code>concatFile3</code>：</p>
-<pre><code class="language-javascript">let withConcatedFile = concatFile3(\&quot;foo.txt\&quot;, \&quot;bar.txt\&quot;, \&quot;baz.txt\&quot;)
+<pre><code data-lang="javascript">let withConcatedFile = concatFile3(\&quot;foo.txt\&quot;, \&quot;bar.txt\&quot;, \&quot;baz.txt\&quot;)
 withConcatedFile(data =&gt; console.log(data));
-//               ^^^^ 这就是我们的文件！
-</code></pre>
-<p>读到这里，你可能感觉被骗了，毕竟我们的代码比以前更加冗长了，而且 &gt; 形状的代码和冗余的错误处理丝毫没有改观。</p>
+//               ^^^^ 这就是我们的文件！</code></pre><p>读到这里，你可能感觉被骗了，毕竟我们的代码比以前更加冗长了，而且 &gt; 形状的代码和冗余的错误处理丝毫没有改观。</p>
 <p>但是应该注意到好的一面：现在，比起最初完全依赖于副作用来进行的函数，我们的函数拥有了返回值。这意味它有了更加接近传统函数的可能：接受输入，给出输出，如此而已。接下来，通过对我们返回的这个函数（就是那个接受回调函数的函数。读起来很绕口，思考起来也有点绕！）进行抽象，我们将会目见许多新的奇妙事物。</p>
-<h1 id="封装返回值">封装返回值</h1>
+<h1>封装返回值</h1>
 <p>直接操作函数可能让一些精于面向对象的程序员们有些不安。另一方面，也不太利于我们对他的拓展。（虽然我们大可像 lisp 程序员那样写直接操纵函数的辅助函数……究竟怎样做，大概是个人选择……）</p>
 <p>我们将那个接受回调函数，然后施用值于它的函数，或者说，那个“表现得有点奇怪的值”——<code>dataCPSx</code>，封装进一个类中：</p>
-<pre><code class="language-javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Async</span> </span>{
+<pre><code data-lang="javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Async</span> </span>{
   <span class="hljs-comment">/* 这里 innerCPSValue 的类型是 callback =&gt; void */</span>
   <span class="hljs-comment">/* 而 callback 的类型则是 (err, data) =&gt; void */</span>
   <span class="hljs-function"><span class="hljs-title">constructor</span>(<span class="hljs-params">innerCPSValue</span>)</span> {
@@ -131,55 +117,47 @@ withConcatedFile(data =&gt; console.log(data));
 readFileAsync = <span class="hljs-function"><span class="hljs-params">file</span> =&gt;</span> <span class="hljs-keyword">new</span> Async(<span class="hljs-function"><span class="hljs-params">callback</span> =&gt;</span> fs.readFile(file, callback))
 <span class="hljs-comment">//                                ^^^^^^^^^^^^^^原本的返回值^^^^^^^^^^^^^^^ </span>
 <span class="hljs-comment">//                      -----------------------如今的返回值-----------------</span>
-<span class="hljs-comment">//                      原本的返回值如今被封装到了 Async 对象中。</span>
-</code></pre>
-<p>这个类和原先的函数是等同的，因此不会有太多改观。</p>
+<span class="hljs-comment">//                      原本的返回值如今被封装到了 Async 对象中。</span></code></pre><p>这个类和原先的函数是等同的，因此不会有太多改观。</p>
 <p>不过，我们可以以之为营，作出一些改变。</p>
 <p>首先，原先的所有回调函数接受两个值：一个错误时的异常，还有一个是成功时的数据。不过事实上，他们很少会有真正同时返回的时候。大多数时候，其中有一个会是 <code>null</code> ；换句话说，我们处理成功和处理失败的逻辑，几乎不会有一起被启动的场景（回忆一下，以前的 try-catch 结构是不是也是这样？）。</p>
 <p>于是可以这样修改 <code>Async</code> 类：</p>
-<pre><code class="language-javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Async</span> </span>{
+<pre><code data-lang="javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Async</span> </span>{
   <span class="hljs-comment">// constructors...</span>
   <span class="hljs-function"><span class="hljs-title">callWithIt</span>(<span class="hljs-params">success, failed</span>)</span> {
     <span class="hljs-built_in">this</span>.innerCPSValue(<span class="hljs-function">(<span class="hljs-params">err, data</span>) =&gt;</span> {
       <span class="hljs-keyword">if</span> (err) {
-             <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> failed === <span class="hljs-string">&#x27;function&#x27;</span>) failed(err);
+     		<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> failed === <span class="hljs-string">&#x27;function&#x27;</span>) failed(err);
         <span class="hljs-keyword">else</span> <span class="hljs-keyword">throw</span> err;
       } <span class="hljs-keyword">else</span> {
-          success(data);
+      	success(data);
       }
     });
   }
-}
-</code></pre>
-<p><code>callWithIt</code> 在回调函数外裹上了一层包装，现在，<code>callWithIt</code> 接受两个回调函数。一个是成功时的回调，另一个是失败时的回调。同时我们保证，在逻辑上，只会有一个回调函数被调用。</p>
+}</code></pre><p><code>callWithIt</code> 在回调函数外裹上了一层包装，现在，<code>callWithIt</code> 接受两个回调函数。一个是成功时的回调，另一个是失败时的回调。同时我们保证，在逻辑上，只会有一个回调函数被调用。</p>
 <blockquote>
 <p>在代数数据类型的观念下，这种作为是将原本是<strong>积类型</strong>的错误 <code>(Error, Data)</code> 二元组变成了<strong>和类型</strong>的错误 <code>Either[Error, Data]</code>。后者类似于联合体类型，它保证同时只会出现一个类型的值。于是便不会出现“错误正确叠加态”，因此我们能够分离处理正确和错误的逻辑——将它们放到两个不同的函数中去。</p>
 </blockquote>
 <p>现在，我们的风格成了这样：</p>
-<pre><code class="language-javascript"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
+<pre><code data-lang="javascript"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
 readFileAsync = <span class="hljs-function"><span class="hljs-params">file</span> =&gt;</span> <span class="hljs-keyword">new</span> Async(<span class="hljs-function"><span class="hljs-params">callback</span> =&gt;</span> fs.readFile(file, callback))
 
 readFileAsync(__filename).callWithIt(
     <span class="hljs-function"><span class="hljs-params">data</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`readed: <span class="hljs-subst">${data.toString()}</span>`</span>),
-        <span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> <span class="hljs-built_in">console</span>.error(<span class="hljs-string">`err: <span class="hljs-subst">${err.message}</span>`</span>) 
-)
-</code></pre>
-<p>看起来简洁了一些，因为我们将那串 <code>if (err) {...}</code> 的模式化代码交给了 <code>Async</code> 类本身。</p>
-<h1 id="重用模式化的代码">重用模式化的代码</h1>
+		<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> <span class="hljs-built_in">console</span>.error(<span class="hljs-string">`err: <span class="hljs-subst">${err.message}</span>`</span>) 
+)</code></pre><p>看起来简洁了一些，因为我们将那串 <code>if (err) {...}</code> 的模式化代码交给了 <code>Async</code> 类本身。</p>
+<h1>重用模式化的代码</h1>
 <p>再请出我们的老朋友，<code>peaceAndLove</code> 来看看：</p>
-<pre><code class="language-javascript">function peaceAndLove(file) {
+<pre><code data-lang="javascript">function peaceAndLove(file) {
   const asyncData = readFailAsync(file);
   return new Async(callback =&gt; asyncData.callWithIt( // &lt;- 创建新的一个 Async 对象
-      data =&gt; callback(null,  // 这个新的 Async 在将值传递给回调函数之前会先做一些处理。
-           data.toString().replace(/fuck/i, \&quot;love\&quot;) // &lt;- 只有这句话里面有 peaceAndLove 的逻辑。
+  	data =&gt; callback(null,  // 这个新的 Async 在将值传递给回调函数之前会先做一些处理。
+ 		  data.toString().replace(/fuck/i, \&quot;love\&quot;) // &lt;- 只有这句话里面有 peaceAndLove 的逻辑。
     ),
     err =&gt; callback(err)
   ));
-}
-</code></pre>
-<p>错误仍旧没有默认行为，而且手动调用 <code>new</code>、生成新对象、注入处理之后的值的操作过度模式化了。</p>
+}</code></pre><p>错误仍旧没有默认行为，而且手动调用 <code>new</code>、生成新对象、注入处理之后的值的操作过度模式化了。</p>
 <p>于是，我们可以将一部分逻辑抽离到单独的方法中去：</p>
-<pre><code class="language-javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Async</span> </span>{
+<pre><code data-lang="javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Async</span> </span>{
   <span class="hljs-comment">//... old functions</span>
   <span class="hljs-comment">/* map 在成功的值传递给回调函数之前附加上一个运算。 */</span>
   <span class="hljs-function"><span class="hljs-title">map</span>(<span class="hljs-params">f</span>)</span> {
@@ -192,50 +170,38 @@ readFileAsync(__filename).callWithIt(
   <span class="hljs-comment">/* mapErr 在失败的值传递给回调函数之前加上一个处理，和 map 十分类似。 */</span>
   <span class="hljs-function"><span class="hljs-title">mapErr</span>(<span class="hljs-params">h</span>)</span> {
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Async(<span class="hljs-function"><span class="hljs-params">callback</span> =&gt;</span> <span class="hljs-built_in">this</span>.callWithIt(
-        <span class="hljs-function"><span class="hljs-params">data</span> =&gt;</span> callback(<span class="hljs-literal">null</span>, data),
+    	<span class="hljs-function"><span class="hljs-params">data</span> =&gt;</span> callback(<span class="hljs-literal">null</span>, data),
       <span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> callback(h(err))
     ))
   }
-}
-</code></pre>
-<blockquote>
+}</code></pre><blockquote>
 <p> <code>map</code> 这个函数对于 <code>Async</code> 类来说有着特殊的意义——我们提到过，<code>Async</code> 对象表示一个特殊的值。更加具体地说，它是装在某个由上下文（成功还是失败，以及对应的回调）组成的盒子里的值。如果把 <code>Async</code> 比作盒子，<code>callWithIt</code> 比作用锤子将盒子砸碎，然后取出里面的值来的话；<code>map</code> 则给予了我们“隔山打牛”的力量。我们可以通过传递函数来操纵其中的值，这意味着我们能够对它做一切函数能做的事情——<code>Async</code> 内封印的值已经与外边的世界完全同态了！完全可以在 <code>map</code> 中调用 <code>console.log</code> 一类的函数，甚至可以借助闭包的力量将值直接传递到外部去（虽然不建议这样做）！</p>
 <p> 当然，从 <code>map</code> 的实现中可以看出来，这一切只会在我们调用 <code>callWithIt</code> 之后发生。</p>
 </blockquote>
 <p>回到眼下，我们可以这样写 <code>peaceAndLove</code> 了……</p>
-<pre><code class="language-javascript">const fs = require(&#x27;fs&#x27;);
+<pre><code data-lang="javascript">const fs = require(&#x27;fs&#x27;);
 readFileAsync = file =&gt; new Async(callback =&gt; fs.readFile(file, callback))
 function peaceAndLove(file) {
   const asyncData = readFileAsync(file);
   return asyncData.map(stream =&gt; stream.toString().replace(/fuck/i, \&quot;love\&quot;));
-}
-</code></pre>
-<p>已经几乎没有冗余代码了。</p>
+}</code></pre><p>已经几乎没有冗余代码了。</p>
 <p>再来看看 <code>concatFile3</code> ……的弟弟 <code>concatFile2</code>，我们故技重施：</p>
-<pre><code class="language-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">concatFile2</span>(<span class="hljs-params">file1, file2</span>) </span>{
+<pre><code data-lang="javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">concatFile2</span>(<span class="hljs-params">file1, file2</span>) </span>{
   <span class="hljs-keyword">const</span> asyncData1 = readFileAsync(file1);
   <span class="hljs-keyword">const</span> asyncData2 = readFileAsync(file2);
   <span class="hljs-keyword">return</span> asyncData1.map(<span class="hljs-function"><span class="hljs-params">data1</span> =&gt;</span> 
     asyncData2.map(<span class="hljs-function"><span class="hljs-params">data2</span> =&gt;</span> 
       <span class="hljs-string">`<span class="hljs-subst">${data1}</span><span class="hljs-subst">${data2}</span>`</span>
   ))
-}
-</code></pre>
-<p>来试试看行不行：</p>
-<pre><code class="language-javascript">concatFile2(__filename, __filename).callWithIt(<span class="hljs-function"><span class="hljs-params">data</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(data));
-</code></pre>
-<p>输出了什么？</p>
-<pre><code>Async { innerCPSValue: [Function] }
-</code></pre>
-<p>……通过不懈的努力，我们获得了双倍的 <code>Async</code>！</p>
+}</code></pre><p>来试试看行不行：</p>
+<pre><code data-lang="javascript">concatFile2(__filename, __filename).callWithIt(<span class="hljs-function"><span class="hljs-params">data</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(data));</code></pre><p>输出了什么？</p>
+<pre><code data-lang="">Async { innerCPSValue: [Function] }</code></pre><p>……通过不懈的努力，我们获得了双倍的 <code>Async</code>！</p>
 <p>就像俄罗斯套娃一样，这个 <code>Async</code> 的 <code>callWithIt</code> 会将另一个 <code>Async</code> 类型的家伙传递给成功回调！</p>
 <p>聪明的我们马上想到这样写：</p>
-<pre><code class="language-javascript">concatFile2(__filename, __filename)
+<pre><code data-lang="javascript">concatFile2(__filename, __filename)
   .callWithIt(<span class="hljs-function"><span class="hljs-params">data</span> =&gt;</span> 
-              data.callWithIt(<span class="hljs-function"><span class="hljs-params">readData</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(readData));
-</code></pre>
-<p>这样的代码也有点模式化了，因此我们可以也将其作为 <code>Async</code> 类的一个方法：</p>
-<pre><code class="language-javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Async</span> </span>{
+              data.callWithIt(<span class="hljs-function"><span class="hljs-params">readData</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(readData));</code></pre><p>这样的代码也有点模式化了，因此我们可以也将其作为 <code>Async</code> 类的一个方法：</p>
+<pre><code data-lang="javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Async</span> </span>{
   <span class="hljs-comment">// ... old codes</span>
   <span class="hljs-comment">/* flatten 压平上文提到的“俄罗斯套娃”结构。 */</span>
   <span class="hljs-function"><span class="hljs-title">flatten</span>(<span class="hljs-params"></span>)</span> {
@@ -245,14 +211,12 @@ function peaceAndLove(file) {
         <span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> callback(err)), 
       <span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> callback(err))) <span class="hljs-comment">// &lt;- 只要二者（自身内部，自身）有一个出现错误，就会直接触发错误回调。</span>
   }
-}
-</code></pre>
-<blockquote>
+}</code></pre><blockquote>
 <p><code>flatten</code>（或者 <code>flatMap</code>，二者可以相互实现。）对于 <code>Async</code> 类而言也有着特别的意义——它允许我们组合任意个返回 <code>Async</code> 对象的计算（也就是异步计算）。如果说 <code>map</code> 允许我们任意操纵同一个“盒子”包裹着的值的话，<code>flatten</code> 则赋予了我们将两个不同“盒子”合二为一的魔法。</p>
 <p>还请注意，这些魔法都必须经由 <code>Async</code> 类本身实现。也就是说，并不是所有的“盒子”都能提供这样的魔力。</p>
 </blockquote>
 <p>我们还可以顺手组合一下 <code>map</code> 和 <code>flatten</code> ：</p>
-<pre><code class="language-javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Async</span> </span>{
+<pre><code data-lang="javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Async</span> </span>{
   <span class="hljs-comment">// ... old codes</span>
   <span class="hljs-function"><span class="hljs-title">flatMap</span>(<span class="hljs-params">f</span>)</span> {
     <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.map(f).flatten();
@@ -261,81 +225,65 @@ function peaceAndLove(file) {
   <span class="hljs-function"><span class="hljs-title">flatMapErr</span>(<span class="hljs-params">h</span>)</span> {
     <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.map(h).flatten();
   }
-}
-</code></pre>
-<h1 id="构造新的语法">构造新的语法</h1>
+}</code></pre><h1>构造新的语法</h1>
 <p>再一次，请老大哥 <code>concatFile3</code> 出场：</p>
-<pre><code class="language-javascript"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
+<pre><code data-lang="javascript"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
 readFileAsync = <span class="hljs-function"><span class="hljs-params">file</span> =&gt;</span> <span class="hljs-keyword">new</span> Async(<span class="hljs-function"><span class="hljs-params">callback</span> =&gt;</span> fs.readFile(file, callback))
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">concatFile3</span>(<span class="hljs-params">file1, file2, file3</span>) </span>{
-    <span class="hljs-keyword">return</span> readFileAsync(file1).flatMap( <span class="hljs-function"><span class="hljs-params">data1</span> =&gt;</span> 
+	<span class="hljs-keyword">return</span> readFileAsync(file1).flatMap( <span class="hljs-function"><span class="hljs-params">data1</span> =&gt;</span> 
            readFileAsync(file2).flatMap( <span class="hljs-function"><span class="hljs-params">data2</span> =&gt;</span> 
              readFileAsync(file3).map( <span class="hljs-function"><span class="hljs-params">data3</span> =&gt;</span> 
                <span class="hljs-string">`<span class="hljs-subst">${data1}</span><span class="hljs-subst">${data2}</span><span class="hljs-subst">${data3}</span>`</span>)))
-}
-</code></pre>
-<p>全新的 <code>concatFile3</code> 有了两处改观：其一是错误有了默认的行为——借助 <code>map</code> 和 <code>flatMap</code> 的帮助，在 <code>map</code> 一个失败的 <code>Async</code> 的时候，什么都不会发生，而当我们想要“转换”或者“预处理”错误的时候，我们可以用 <code>mapErr</code> 和 <code>flatMapErr</code>。其二是我们的代码中“逻辑”的密度上升了不少——因为那些样板代码都在 <code>map</code> 和 <code>flatmap</code> 中了。</p>
+}</code></pre><p>全新的 <code>concatFile3</code> 有了两处改观：其一是错误有了默认的行为——借助 <code>map</code> 和 <code>flatMap</code> 的帮助，在 <code>map</code> 一个失败的 <code>Async</code> 的时候，什么都不会发生，而当我们想要“转换”或者“预处理”错误的时候，我们可以用 <code>mapErr</code> 和 <code>flatMapErr</code>。其二是我们的代码中“逻辑”的密度上升了不少——因为那些样板代码都在 <code>map</code> 和 <code>flatmap</code> 中了。</p>
 <p>另一方面，我们的代码还有了一丝令人怀念的气息：每一处 <code>flatMap</code> 就像是一次赋值一样，假如我们对这个函数做一下变形……</p>
 <p>先增加一些方法：</p>
-<pre><code class="language-javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Async</span></span>{
+<pre><code data-lang="javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Async</span></span>{
   <span class="hljs-comment">// ... old codes</span>
   <span class="hljs-comment">/* unit 将一个普通的值包装成 Async 类的值，创造一个马上成功的 Async。*/</span>
   <span class="hljs-keyword">static</span> <span class="hljs-function"><span class="hljs-title">unit</span>(<span class="hljs-params">item</span>)</span> {
-      <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Async(<span class="hljs-function"><span class="hljs-params">callback</span> =&gt;</span> callback(<span class="hljs-literal">null</span>, item));
+  	<span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Async(<span class="hljs-function"><span class="hljs-params">callback</span> =&gt;</span> callback(<span class="hljs-literal">null</span>, item));
   }
 
   <span class="hljs-comment">/* 创造一个立即失败的 Async。 */</span>
   <span class="hljs-keyword">static</span> <span class="hljs-function"><span class="hljs-title">fail</span>(<span class="hljs-params">err</span>)</span> {
-      <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Async(<span class="hljs-function"><span class="hljs-params">callback</span> =&gt;</span> callback(err));
+  	<span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Async(<span class="hljs-function"><span class="hljs-params">callback</span> =&gt;</span> callback(err));
   }
-}
-</code></pre>
-<blockquote>
+}</code></pre><blockquote>
 <p><code>unit</code> 也是有着特殊意义的函数， 它召来了“空上下文”。我们可以将任意一个值安装到由“空上下文”构成的盒子中去。</p>
 </blockquote>
 <p>接下来，把最后一个 <code>map</code> 换成 <code>flatMap</code>，再来看看我们的 <code>concatFile3</code> 老大哥。</p>
-<pre><code class="language-javascript"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
+<pre><code data-lang="javascript"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
 readFileAsync = <span class="hljs-function"><span class="hljs-params">file</span> =&gt;</span> <span class="hljs-keyword">new</span> Async(<span class="hljs-function"><span class="hljs-params">callback</span> =&gt;</span> fs.readFile(file, callback))
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">concatFile3</span>(<span class="hljs-params">file1, file2, file3</span>) </span>{
-    <span class="hljs-keyword">return</span> readFileAsync(file1).flatMap( <span class="hljs-function"><span class="hljs-params">data1</span> =&gt;</span> <span class="hljs-comment">// data1 &lt;- readFileAsync(file1)</span>
+	<span class="hljs-keyword">return</span> readFileAsync(file1).flatMap( <span class="hljs-function"><span class="hljs-params">data1</span> =&gt;</span> <span class="hljs-comment">// data1 &lt;- readFileAsync(file1)</span>
          readFileAsync(file2).flatMap( <span class="hljs-function"><span class="hljs-params">data2</span> =&gt;</span> <span class="hljs-comment">// data2 &lt;- readFileAsync(file2)</span>
          readFileAsync(file3).flatMap( <span class="hljs-function"><span class="hljs-params">data3</span> =&gt;</span> <span class="hljs-comment">// data3 &lt;- readFileAsync(file3)</span>
          Async.unit(<span class="hljs-string">`<span class="hljs-subst">${data1}</span><span class="hljs-subst">${data2}</span><span class="hljs-subst">${data3}</span>`</span>)))) <span class="hljs-comment">// return `${data1}${data2}${data3}`</span>
-}
-</code></pre>
-<p>现在，每一行都有了全新的意义：每一处 <code>flatMap</code> 就像是把藏在 <code>Async</code> 中的值抽取出来了一般；而这一切操作的结果必须也是一个 <code>Async</code>。因此对于一个普通的值来说，<code>unit</code> 就像是 <code>return</code> 一般。</p>
+}</code></pre><p>现在，每一行都有了全新的意义：每一处 <code>flatMap</code> 就像是把藏在 <code>Async</code> 中的值抽取出来了一般；而这一切操作的结果必须也是一个 <code>Async</code>。因此对于一个普通的值来说，<code>unit</code> 就像是 <code>return</code> 一般。</p>
 <p>所以，试着来增加一些语法规则将其变成我们真正熟悉的那样吧。</p>
-<p>**第一个规则是 <code>await</code>**。</p>
+<p><strong>第一个规则是 <code>await</code></strong>。</p>
 <p>每一行 <code>await someAsyncValue</code> 都可以将其翻译为 <code>someAsyncValue.flatMap( __var1 =&gt; {...} )</code>。</p>
 <p>其中，<code>...</code> 中承载着的就是之后的代码，同时将其中每一个用到 <code>await someAsyncValue</code> 的地方换成 <code>__var1</code> ，例如：</p>
-<pre><code class="language-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">readData</span>(<span class="hljs-params">file1</span>) </span>{ 
-    <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> readFileAsync(file1);
-    <span class="hljs-comment">// 剩余部分的代码……</span>
-}
-</code></pre>
-<p>可以被翻译为：</p>
-<pre><code class="language-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">readData</span>(<span class="hljs-params">file1</span>) </span>{
+<pre><code data-lang="javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">readData</span>(<span class="hljs-params">file1</span>) </span>{ 
+	<span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> readFileAsync(file1);
+	<span class="hljs-comment">// 剩余部分的代码……</span>
+}</code></pre><p>可以被翻译为：</p>
+<pre><code data-lang="javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">readData</span>(<span class="hljs-params">file1</span>) </span>{
   <span class="hljs-keyword">return</span> readFileAsync(file1).flatMap(<span class="hljs-function"><span class="hljs-params">__var1</span> =&gt;</span> {
     <span class="hljs-keyword">const</span> data = __var1;
     <span class="hljs-comment">// 剩余部分的代码……</span>
   })
-}
-</code></pre>
-<p>在我们的使用者看来，<code>await someAsyncValue</code> 就好像是会直接返回包裹在 <code>Async</code> 内部的值一般。另外，我们必须把 <code>return</code> 提前到第一个 <code>await</code> 之前，不过这反倒是细枝末节的事情了。</p>
+}</code></pre><p>在我们的使用者看来，<code>await someAsyncValue</code> 就好像是会直接返回包裹在 <code>Async</code> 内部的值一般。另外，我们必须把 <code>return</code> 提前到第一个 <code>await</code> 之前，不过这反倒是细枝末节的事情了。</p>
 <p>但是，还有一个问题：传入 <code>flatMap</code> 的函数的返回类型必须是 <code>Async</code>。</p>
 <p>因此，<strong>我们在函数声明前面加上 <code>async</code> 以区分；这就是第二个语法规则</strong>。我们保证，具有这个标志的函数必须返回 <code>Async</code> 值，若不然，我们会在 <code>return</code> 前面加上 <code>unit</code>：</p>
-<pre><code class="language-javascript"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">theUniverse</span>(<span class="hljs-params"></span>) </span>{
-    <span class="hljs-keyword">return</span> <span class="hljs-number">42</span>;
-}
-</code></pre>
-<p>会被视作：</p>
-<pre><code class="language-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">theUniverse</span>(<span class="hljs-params"></span>) </span>{
+<pre><code data-lang="javascript"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">theUniverse</span>(<span class="hljs-params"></span>) </span>{
+	<span class="hljs-keyword">return</span> <span class="hljs-number">42</span>;
+}</code></pre><p>会被视作：</p>
+<pre><code data-lang="javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">theUniverse</span>(<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">return</span> Async.unit(<span class="hljs-number">42</span>);
-}
-</code></pre>
-<p>同时，为了阻止返回未经包装的值（事实上，我们根本做不到返回未经包装的值！），**我们仅仅允许在 <code>async</code> 函数内部使用 <code>await</code>**。</p>
+}</code></pre><p>同时，为了阻止返回未经包装的值（事实上，我们根本做不到返回未经包装的值！），<strong>我们仅仅允许在 <code>async</code> 函数内部使用 <code>await</code></strong>。</p>
 <p>这样一来，<code>concatFile3</code> 可以这样写：</p>
-<pre><code class="language-javascript"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
+<pre><code data-lang="javascript"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
 readFileAsync = <span class="hljs-function"><span class="hljs-params">file</span> =&gt;</span> <span class="hljs-keyword">new</span> Async(<span class="hljs-function"><span class="hljs-params">callback</span> =&gt;</span> fs.readFile(file, callback))
 
 <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">concatFile3</span>(<span class="hljs-params">file1, file2, file3</span>) </span>{
@@ -343,10 +291,8 @@ readFileAsync = <span class="hljs-function"><span class="hljs-params">file</span
   <span class="hljs-keyword">const</span> data2 = <span class="hljs-keyword">await</span> readFileAsync(file2);
   <span class="hljs-keyword">const</span> data3 = <span class="hljs-keyword">await</span> readFileAsync(file3);
   <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${data1}</span><span class="hljs-subst">${data2}</span><span class="hljs-subst">${data3}</span>`</span>;
-}
-</code></pre>
-<p>几乎已经和同步时一样了。</p>
-<h1 id="中途站">中途站</h1>
+}</code></pre><p>几乎已经和同步时一样了。</p>
+<h1>中途站</h1>
 <p>看起来，我们的伙伴 <code>Async</code> 已经达到了我们的目标了。它挪走了三座大山：冗余的异常处理、诡异的返回方式和 &gt; 形状的代码。最终，<code>concatFile3</code> 已经和同步时相当地相似了。我们似乎已经战胜了回调地狱，夺回了符合直觉的命令式编程习惯。</p>
 <p>但事实上，如果你把最终版本的代码粘贴到 <code>node</code> 中去，几乎肯定是无法运行的。因为我们没有修改 Javascript 语法的力量。虽然 <code>Async</code> 类的之前的一切都可以做到，但是最后我们会止步于 <code>map/flatMap</code> 的世界中。最后的 <code>async/await</code> 不过是幻梦罢了。</p>
 <p>……</p>

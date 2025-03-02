@@ -11,11 +11,11 @@ html
             .fix-sized.w100
                 h1 #{name}
                 each t in tags
-                    .tag #{t}
+                    .hash-tag.inline-info #{t}
                 p
-                    span.badge 发布于
-                    span.info.mr1 #{createdAt}
+                    span.badge 发布
+                    span.lnline-info.at-date #{createdAt.toLocaleString()}
                 p
-                    span.badge 更新于
-                    span.info.mr1 #{lastUpdated}
+                    span.badge 更新
+                    span.lnline-info.at-date #{lastUpdated.toLocaleString()}
                 | !{renderedContent}
